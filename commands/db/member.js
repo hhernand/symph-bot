@@ -1,10 +1,9 @@
 module.exports = {
-  addMember: function (msg, con) {
-    let data = msg.content.split(" ");
+  addMember: function (msg, id, con) {
+    let data = msg.split(" ");
     let user = data[1];
 
-    let id = msg.author.id;
-    sql = "INSERT INTO member VALUES (" + id + '", "' + user + '", 0)';
+    sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
 
     con.query(sql);
 
