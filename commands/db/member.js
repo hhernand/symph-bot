@@ -7,8 +7,7 @@ module.exports = {
 
     con.query(sql);
 
-    let role = msg.guild.roles.find("name", "test");
-    msg.author.addRole(role);
+    msg.author.addRole('439557423389343744');
 
     let res = 'Added to database. Welcome to the group ' + user + '!';
 
