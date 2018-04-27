@@ -3,7 +3,7 @@ module.exports = {
     let data = msg.split(" ");
     let user = data[1];
 
-    sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
+    let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
 
     con.query(sql);
 
