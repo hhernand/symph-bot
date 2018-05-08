@@ -9,9 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.3.0",
+    "discord.js": "^11.3.2",
     "mysql": "^2.15.0",
-    "require-dir-all": "^0.4.15",
-    "request": "2.81.0"
+    "request": "^2.81.0",
+    "require-dir-all": "^0.4.15"
   }
 }
