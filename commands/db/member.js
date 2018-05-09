@@ -40,7 +40,7 @@ module.exports = {
         function(err, owned) {
           const embed = new ds.RichEmbed()
             .setTitle('My Info')
-            .setColor(0x5795FE)
+            .setColor('BLUE')
             .setThumbnail(msg.author.avatarURL)
             .addField('Username', user, Boolean(true))
             .addField('Marbles', num, Boolean(true))

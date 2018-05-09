@@ -21,5 +21,13 @@ module.exports = {
       if (err) callback(err);
       callback(owns);
     });
+  },
+
+  shop: function(con, callback) {
+    let sql = 'SELECT * FROM item';
+    con.query(sql, (err, items) => {
+      if (err) callback(err);
+      callback(items);
+    })
   }
 }
