@@ -1,3 +1,6 @@
+const async = require('async');
+const access = require('../../utils/access.js');
+
 module.exports = {
   addMember: function(msg, con) {
     let user = msg.content.split(" ")[1];
@@ -17,13 +20,28 @@ module.exports = {
   myInfo: function(msg, con) {
     let id = msg.author.id;
 
-    let sql = 'SELECT * FROM member WHERE memberID = "' + id + '"';
+    access.member(id, con, function(member) {
+      let user = member[0].name;
+      let num = member[0].marbles;
 
-    con.query(sql, (err, rows) => {
-      let user = rows[0].name;
-      let num = rows[0].marbles;
+      var res = 'Username: ' + user + '\nMarbles: ' + num + '\nItems:\n';
 
-      msg.channel.send('Username: ' + user + '\nMarbles: ' + num);
-    })
+      var q = 0;
+
+      access.owns(id, con, function(owned) {
+        async.eachSeries(owned, function(el, callback) {
+          q = el.quantity;
+
+          access.item(el.itemID, con, function(entry) {
+            res += entry[0].name + ' - ' + q + '\n';
+            console.log(res);
+            callback();
+          });
+        },
+        function(err, owned) {
+          msg.channel.send(res);
+        });
+      });
+    });
   }
 };
