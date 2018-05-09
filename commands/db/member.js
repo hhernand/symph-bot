@@ -17,15 +17,15 @@ module.exports = {
     return res;
   },
 
-  myInfo: function(msg, con) {
+  myInfo: function(msg, ds, con) {
     let id = msg.author.id;
 
     access.member(id, con, function(member) {
       let user = member[0].name;
       let num = member[0].marbles;
 
-      var res = 'Username: ' + user + '\nMarbles: ' + num + '\nItems:\n';
-
+      //var res = 'Username: ' + user + '\nMarbles: ' + num + '\nItems:\n';
+      var res = '';
       var q = 0;
 
       access.owns(id, con, function(owned) {
@@ -34,12 +34,19 @@ module.exports = {
 
           access.item(el.itemID, con, function(entry) {
             res += entry[0].name + ' - ' + q + '\n';
-            console.log(res);
             callback();
           });
         },
         function(err, owned) {
-          msg.channel.send(res);
+          const embed = new ds.RichEmbed()
+            .setTitle('My Info')
+            .setColor(0x5795FE)
+            .setThumbnail(msg.author.avatarURL)
+            .addField('Username', user, Boolean(true))
+            .addField('Marbles', num, Boolean(true))
+            .addField('Items', res);
+
+          msg.channel.send(embed);
         });
       });
     });
