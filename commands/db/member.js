@@ -9,6 +9,10 @@ module.exports = {
     let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
 
     con.query(sql);
+    
+    sql = 'INSERT INTO owns VALUES ("' + id + '", 0, 1)';
+
+    con.query(sql);
 
     msg.member.addRole('445705538471198743');
 
@@ -26,16 +30,18 @@ module.exports = {
 
       //var res = 'Username: ' + user + '\nMarbles: ' + num + '\nItems:\n';
       var res = '';
-      var q = 0;
+      var q = '';
 
       access.owns(id, con, function(owned) {
         async.eachSeries(owned, function(el, callback) {
-          q = el.quantity;
+          if (el.quantity > 1) q = String(el.quantity);
 
           access.item(el.itemID, con, function(entry) {
             res += entry[0].name + ' - ' + q + '\n';
             callback();
           });
+          
+          q = '';
         },
         function(err, owned) {
           const embed = new ds.RichEmbed()
