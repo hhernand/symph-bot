@@ -20,48 +20,52 @@ module.exports = {
 
   buy: function(msg, con) {
     let buyerID = msg.author.id;
-    let item = msg.content.split("buy ")[1];
+    let want = Number(msg.content.split(' ')[1]);
+    if (want > 0) {
+      let item = msg.content.split('\"')[1];
 
-    let sql = 'SELECT * FROM item WHERE name = "' + item + '"';
-    let res = '';
+      let sql = 'SELECT * FROM item WHERE name = "' + item + '"';
+      let res = '';
 
-    con.query(sql, (err, items) => {
-      if (err) throw err;
-      else if (items.length == 0) msg.channel.send('That item is not in the shop!');
-      else {
-        let price = items[0].cost;
-
-        access.memberByID(buyerID, con, function(buyer) {
-          let num = buyer[0].marbles;
-          if (price > num) {
-            // not enough marbles
-            res = "You do not have enough marbles.";
-          }
-          else {
-            let newTotal = num - price;
-            let updateMarbles = 'UPDATE member SET marbles = ' + newTotal + ' WHERE memberID = "' + buyerID + '"';
-            con.query(updateMarbles);
-
-            let alreadyHave = 'SELECT * FROM owns WHERE memberID = "' + buyerID + '" AND itemID = ' + items[0].itemID;
-
-            con.query(alreadyHave, (err2, owns) => {
-              if (err2) throw err2;
-              else if (owns.length == 1) {
-                let newItem = owns[0].quantity + 1;
-                let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + buyerID + '" AND itemID = ' + items[0].itemID;
-                con.query(updateItem);
+      con.query(sql, (err, items) => {
+        if (err) throw err;
+        else if (items.length == 0) msg.channel.send('That item is not in the shop!');
+        else {
+          let price = items[0].cost;
+          if (price != 0) {
+            access.memberByID(buyerID, con, function(buyer) {
+              let num = buyer[0].marbles;
+              if ((price*want) > num) {
+                // not enough marbles
+                res = "You do not have enough marbles.";
               }
               else {
-                let newEntry = 'INSERT INTO owns VALUES("' + buyerID + '", ' + items[0].itemID + ', ' + 1 + ')';
-                con.query(newEntry);
+                let newTotal = num - (price*want);
+                let updateMarbles = 'UPDATE member SET marbles = ' + newTotal + ' WHERE memberID = "' + buyerID + '"';
+                con.query(updateMarbles);
+
+                let alreadyHave = 'SELECT * FROM owns WHERE memberID = "' + buyerID + '" AND itemID = ' + items[0].itemID;
+
+                con.query(alreadyHave, (err2, owns) => {
+                  if (err2) throw err2;
+                  else if (owns.length == 1) {
+                    let newItem = owns[0].quantity + want;
+                    let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + buyerID + '" AND itemID = ' + items[0].itemID;
+                    con.query(updateItem);
+                  }
+                  else {
+                    let newEntry = 'INSERT INTO owns VALUES("' + buyerID + '", ' + items[0].itemID + ', ' + want + ')';
+                    con.query(newEntry);
+                  }
+                });
+                res = "Item bought."
               }
+              msg.channel.send(res);
             });
-            res = "Item bought."
           }
-          msg.channel.send(res);
-        });
-      }
-    });
+        }
+      });
+    }
   },
 
   shopList: function(msg, ds, con) {
@@ -73,8 +77,8 @@ module.exports = {
         cost += items[i].cost + '\n';
       }
       const embed = new ds.RichEmbed()
-        .setTitle('Marble Shop')
-        .setFooter('To purchase an item, type !buy [item] without brackets.')
+        .setTitle('The Bath House')
+        .setFooter('To purchase an item, type !buy 1 "item". You can set the quantity.')
         .setColor('AQUA')
         .addField('Name', name, Boolean(true))
         .addField('Price', cost, Boolean(true))
