@@ -40,6 +40,10 @@ bot.on('message', (message) => {
   if (message.content.startsWith('!giveItem')) {
     db.items.giveItem(message, con);
   }
+
+  if (message.content.startsWith('!giveMarbles')) {
+    db.marbles.giveMarbles(message, con);
+  }
 });
 
 bot.login(process.env.BOT_TOKEN);

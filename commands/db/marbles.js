@@ -18,10 +18,38 @@ module.exports = {
     }
   },
 
+  giveMarbles: function(msg, con) {
+    let giverID = msg.author.id;
+    access.memberByID(giverID, con, function(g) {
+      if (g.length == 0) {
+        msg.channel.send('You\'re not a member yet! You can\'t give anything!');
+      } else {
+        let receiver = msg.content.split(" ")[1];
+        access.memberByName(receiver, con, function(r) {
+          if (r.length == 0) {
+            msg.channel.send('That member does not exist!');
+          } else {
+            if (!isNaN(msg.content.split(" ")[2])) {
+              let amount = Number(msg.content.split(" ")[2]);
+              if (g[0].marbles < amount) {
+                msg.channel.send('You don\'t have enough marbles to give!');
+              } else {
+                let sql = 'UPDATE member SET marbles = ' + (g[0].marbles - amount) + ' WHERE memberID = "' + giverID + '"';
+                let sql2 = 'UPDATE member SET marbles = ' + (r[0].marbles + amount) + ' WHERE memberID = "' + r[0].memberID + '"';
+                con.query(sql);
+                con.query(sql2);
+              }
+            }
+          }
+        });
+      }
+    });
+  },
+
   buy: function(msg, con) {
     let buyerID = msg.author.id;
     let want = Number(msg.content.split(' ')[1]);
-    if (want > 0) {
+    if (!isNaN(want) && want > 0) {
       let item = msg.content.split('\"')[1];
 
       let sql = 'SELECT * FROM item WHERE name = "' + item + '"';
