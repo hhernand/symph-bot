@@ -48,7 +48,7 @@ module.exports = {
   },
 
   shop: function(con, callback) {
-    let sql = 'SELECT * FROM item';
+    let sql = 'SELECT * FROM item WHERE cost > 0';
     con.query(sql, (err, items) => {
       if (err) callback(err);
       callback(items);
