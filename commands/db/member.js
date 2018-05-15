@@ -28,32 +28,43 @@ module.exports = {
       let user = member[0].name;
       let num = member[0].marbles;
 
-      //var res = 'Username: ' + user + '\nMarbles: ' + num + '\nItems:\n';
-      var res = '';
-      var q = '';
-
       access.owns(id, con, function(owned) {
-        async.eachSeries(owned, function(el, callback) {
-
-          access.itemByID(el.itemID, con, function(entry) {
-            if (el.quantity > 1) q = ' x ' + String(el.quantity);
-            res += entry[0].name + q + '\n';
-            callback();
-          });
-
-          q = '';
-        },
-        function(err, owned) {
+        if (owned.length == 0) {
           const embed = new ds.RichEmbed()
-            .setTitle('My Info')
+            .setTitle(msg.author.username)
             .setColor('BLUE')
             .setThumbnail(msg.author.avatarURL)
-            .addField('Username', user, Boolean(true))
-            .addField('Marbles', num, Boolean(true))
-            .addField('Items', res);
+            .addField('DA Username', user, true)
+            .addField('Marbles', num, true);
 
           msg.channel.send(embed);
-        });
+        }
+        else {
+          var res = '';
+          var q = '';
+
+          async.eachSeries(owned, function(el, callback) {
+
+            access.itemByID(el.itemID, con, function(entry) {
+              if (el.quantity > 1) q = ' x ' + String(el.quantity);
+              res += entry[0].name + q + '\n';
+              callback();
+            });
+
+            q = '';
+          },
+          function(err, owned) {
+            const embed = new ds.RichEmbed()
+              .setTitle(msg.author.username)
+              .setColor('BLUE')
+              .setThumbnail(msg.author.avatarURL)
+              .addField('DA Username', user, true)
+              .addField('Marbles', num, true)
+              .addField('Items', res);
+
+            msg.channel.send(embed);
+          });
+        }
       });
     });
   }
