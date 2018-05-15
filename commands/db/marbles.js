@@ -37,7 +37,7 @@ module.exports = {
               let num = buyer[0].marbles;
               if ((price*want) > num) {
                 // not enough marbles
-                res = "You do not have enough marbles.";
+                res = "Nice try, but you don't have enough marbles!";
               }
               else {
                 let newTotal = num - (price*want);
@@ -58,7 +58,7 @@ module.exports = {
                     con.query(newEntry);
                   }
                 });
-                res = "Item bought."
+                res = "Purchased! Be sure to use !myInfo to check if you got your items."
               }
               msg.channel.send(res);
             });
@@ -69,19 +69,44 @@ module.exports = {
   },
 
   shopList: function(msg, ds, con) {
-    var name = '';
-    var cost = '';
+    var common = '';
+    var uncommon = '';
+    var rare = '';
+    var salts = '';
+    var soaps = '';
+    let iName = '';
+    let iPrice = 0;
     access.shop(con, function(items) {
       for (let i = 0; i < items.length; i++) {
-        name += items[i].name + '\n';
-        cost += items[i].cost + '\n';
+        iName = items[i].name;
+        iPrice = items[i].cost;
+        if (iName.includes("Bath Bomb")) {
+          if (iPrice == 5) {
+            common += iName + '\n';
+          }
+          else if (iPrice == 10) {
+            uncommon += iName + '\n';
+          }
+          else {
+            rare += iName + '\n';
+          }
+        }
+        else if (iName.includes("Salts")) {
+          salts += iName + ' - ' + iPrice + '\n';
+        }
+        else {
+          soaps += iName + ' - ' + iPrice + '\n';
+        }
       }
       const embed = new ds.RichEmbed()
         .setTitle('The Bath House')
         .setFooter('To purchase an item, type !buy 1 "item". You can set the quantity.')
         .setColor('AQUA')
-        .addField('Name', name, Boolean(true))
-        .addField('Price', cost, Boolean(true))
+        .addField('Common - 5', common, true)
+        .addField('Uncommon - 10', uncommon, true)
+        .addField('Rare - 20', rare, true)
+        .addField('Salts', salts, true)
+        .addField('Soaps', soaps)
 
       msg.channel.send(embed);
     })
