@@ -9,7 +9,7 @@ module.exports = {
     let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
 
     con.query(sql);
-    
+
     sql = 'INSERT INTO owns VALUES ("' + id + '", 0, 1)';
 
     con.query(sql);
@@ -24,7 +24,7 @@ module.exports = {
   myInfo: function(msg, ds, con) {
     let id = msg.author.id;
 
-    access.member(id, con, function(member) {
+    access.memberByID(id, con, function(member) {
       let user = member[0].name;
       let num = member[0].marbles;
 
@@ -36,11 +36,11 @@ module.exports = {
         async.eachSeries(owned, function(el, callback) {
           if (el.quantity > 1) q = ' x ' + String(el.quantity);
 
-          access.item(el.itemID, con, function(entry) {
+          access.itemByID(el.itemID, con, function(entry) {
             res += entry[0].name + q + '\n';
             callback();
           });
-          
+
           q = '';
         },
         function(err, owned) {

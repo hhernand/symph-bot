@@ -31,7 +31,7 @@ module.exports = {
       else {
         let price = items[0].cost;
 
-        access.member(buyerID, con, function(buyer) {
+        access.memberByID(buyerID, con, function(buyer) {
           let num = buyer[0].marbles;
           if (price > num) {
             // not enough marbles
