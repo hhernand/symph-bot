@@ -34,9 +34,9 @@ module.exports = {
 
       access.owns(id, con, function(owned) {
         async.eachSeries(owned, function(el, callback) {
-          if (el.quantity > 1) q = ' x ' + String(el.quantity);
 
           access.itemByID(el.itemID, con, function(entry) {
+            if (el.quantity > 1) q = ' x ' + String(el.quantity);
             res += entry[0].name + q + '\n';
             callback();
           });
