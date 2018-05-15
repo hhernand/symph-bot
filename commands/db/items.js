@@ -13,7 +13,6 @@ module.exports = {
             msg.channel.send('That member does not exist!');
           } else {
             let item = msg.content.split("\"")[1];
-            console.log(item);
             access.itemByName(item, con, function(i) {
               if (i.length == 0) {
                 msg.channel.send('That doesn\'t exist silly!');
@@ -36,10 +35,9 @@ module.exports = {
                       if (hasItem2.length == 0) {
                         sql2 = 'INSERT INTO owns VALUES ("' + r[0].memberID + '", ' + itemID + ', 1)';
                       } else {
-                        q = hasItem2[0].quantity;
-                        sql2 = 'UPDATE owns SET quantity = ' + (q+1) + ' WHERE memberID = "' + r[0].memberID + '" AND itemID = ' + itemID;
+                        let q2 = hasItem2[0].quantity;
+                        sql2 = 'UPDATE owns SET quantity = ' + (q2+1) + ' WHERE memberID = "' + r[0].memberID + '" AND itemID = ' + itemID;
                       }
-                      console.log(sql2);
                       con.query(sql2);
                       msg.channel.send('You gave ' + item + ' to ' + receiver + '!');
                     });
