@@ -38,6 +38,7 @@ module.exports = {
                 let sql2 = 'UPDATE member SET marbles = ' + (r[0].marbles + amount) + ' WHERE memberID = "' + r[0].memberID + '"';
                 con.query(sql);
                 con.query(sql2);
+                msg.channel.send('You gave ' + amount + ' marbles to ' + receiver + '!');
               }
             }
           }
