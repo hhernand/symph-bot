@@ -59,7 +59,7 @@ bot.on('message', (message) => {
 
   // mod commands
 
-  if (message.guild != null && message.member.roles.has('445676592979509258')) {
+  if (message.channel.id == '445676833917108224') {
     if (message.content.startsWith('!rewardMarbles ')) {
       db.marbles.rewardMarbles(message, con);
     }
