@@ -3,6 +3,7 @@ const bot = new Discord.Client();
 const mysql = require('mysql');
 
 const db = require('require-dir-all')('./commands/db');
+const other = require('require-dir-all')('./commands/other');
 
 var con;
 if(process.env.JAWSDB_URL) {
@@ -30,6 +31,14 @@ bot.on('message', (message) => {
     db.marbles.giveMarbles(message, con);
   }
 
+  if (message.content.startsWith('!roll ')) {
+    other.rng.roll(message);
+  }
+
+  if (message.content.startsWith('!rng ')) {
+    other.rng.rng(message);
+  }
+
   // shop
 
   if (message.channel.id == '446075264791740432') {
@@ -47,6 +56,10 @@ bot.on('message', (message) => {
   if (message.member.roles.has('445676592979509258')) {
     if (message.content.startsWith('!rewardMarbles ')) {
       db.marbles.rewardMarbles(message, con);
+    }
+
+    if (message.content.startsWith('!check ')) {
+      db.member.checkMember(message, Discord, con);
     }
   }
 });
