@@ -29,6 +29,14 @@ bot.on('message', (message) => {
     db.marbles.giveMarbles(message, con);
   }
 
+  if (message.content == '!commands') {
+    db.commands.cList(message, Discord, con);
+  }
+
+  if (message.content.startsWith('!commandInfo ')) {
+    db.commands.cInfo(message, Discord, con);
+  }
+
   if (message.content.startsWith('!roll ')) {
     other.rng.roll(message);
   }

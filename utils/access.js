@@ -53,5 +53,21 @@ module.exports = {
       if (err) callback(err);
       callback(items);
     })
+  },
+
+  commands: function(con, callback) {
+    let sql = 'SELECT * FROM command WHERE type not like "mod"';
+    con.query(sql, (err, commands) => {
+      if (err) callback(err);
+      callback(commands);
+    })
+  },
+
+  commandSpecific: function(specific, con, callback) {
+    let sql = 'SELECT * FROM command WHERE name = "' + specific + '"';
+    con.query(sql, (err, command) => {
+      if (err) callback(err);
+      callback(command);
+    })
   }
 }
