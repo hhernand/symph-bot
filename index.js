@@ -61,6 +61,10 @@ bot.on('message', (message) => {
     if (message.content.startsWith('!check ')) {
       db.member.checkMember(message, Discord, con);
     }
+
+    if (message.content.startsWith('!take ')) {
+      db.items.takeItem(message, con);
+    }
   }
 });
 

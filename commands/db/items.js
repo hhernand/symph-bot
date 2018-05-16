@@ -49,5 +49,27 @@ module.exports = {
         });
       }
     });
+  },
+
+  takeItem: function(msg, con) {
+    let user = msg.content.split(" ")[1];
+    let item = msg.content.split('\"')[1];
+    access.memberByName(user, con, function(member) {
+      let mID = member[0].memberID;
+      access.itemByName(item, con, function(thing) {
+        let iID = thing[0].itemID;
+        access.ownsSpecific(mID, iID, con, function(owns) {
+          let q = owns[0].quantity;
+          let sql = '';
+          if (q == 1) {
+            sql = 'DELETE FROM owns WHERE memberID = "' + mID + '" AND itemID = ' + iID;
+          } else {
+            sql = 'UPDATE owns SET quantity = ' + (q-1) + ' WHERE memberID = "' + mID + '" AND itemID = ' + iID;
+          }
+          con.query(sql);
+          msg.channel.send('You took ' + item + ' from ' + user + '!');
+        })
+      });
+    });
   }
 }
