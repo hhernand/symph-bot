@@ -6,19 +6,21 @@ module.exports = {
     let user = msg.content.split(" ")[1];
     let id = msg.author.id;
 
-    let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
+    access.memberByID(id, con, function(member) {
+      if (member.length == 1) {
+        let res = 'You\'re already a member!';
+        msg.channel.send(res);
+      } else {
+        let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
 
-    con.query(sql);
+        con.query(sql);
 
-    sql = 'INSERT INTO owns VALUES ("' + id + '", 0, 1)';
+        msg.member.addRole('445705538471198743');
 
-    con.query(sql);
-
-    msg.member.addRole('445705538471198743');
-
-    let res = 'Added to database. Welcome to the group ' + user + '!';
-
-    return res;
+        let res = 'Added to database. Welcome to the group ' + user + '!';
+        msg.channel.send(res);
+      }
+    });
   },
 
   myInfo: function(msg, ds, con) {
