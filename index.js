@@ -17,11 +17,10 @@ bot.on('message', (message) => {
   }
 
   if (message.content.startsWith('!add')) {
-    res = db.member.addMember(message, con);
-    message.channel.send(res);
+    db.member.addMember(message, con);
   }
 
-  if (message.content.startsWith('!rewardMarbles')) {
+  if (message.content.startsWith('!rewardMarbles ')) {
     db.marbles.rewardMarbles(message, con);
   }
 
@@ -33,15 +32,15 @@ bot.on('message', (message) => {
     db.marbles.shopList(message, Discord, con);
   }
 
-  if (message.content.startsWith('!buy')) {
+  if (message.content.startsWith('!buy ')) {
     db.marbles.buy(message, con);
   }
 
-  if (message.content.startsWith('!giveItem')) {
+  if (message.content.startsWith('!giveItem ')) {
     db.items.giveItem(message, con);
   }
 
-  if (message.content.startsWith('!giveMarbles')) {
+  if (message.content.startsWith('!giveMarbles ')) {
     db.marbles.giveMarbles(message, con);
   }
 });
