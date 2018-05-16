@@ -10,8 +10,6 @@ if(process.env.JAWSDB_URL) {
     con = mysql.createConnection(process.env.JAWSDB_URL);
 };
 
-let res = '';
-
 bot.on('message', (message) => {
   // registry and member commands
 
