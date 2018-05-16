@@ -12,28 +12,14 @@ if(process.env.JAWSDB_URL) {
 let res = '';
 
 bot.on('message', (message) => {
-  if (message.content == 'Hello!') {
-    message.channel.send('Hi ' + message.author.username + '!');
-  }
+  // registry and member commands
 
-  if (message.content.startsWith('!add')) {
+  if (message.content.startsWith('!add') && message.channel.id == '446074832837410826') {
     db.member.addMember(message, con);
-  }
-
-  if (message.content.startsWith('!rewardMarbles ')) {
-    db.marbles.rewardMarbles(message, con);
   }
 
   if (message.content == '!myInfo') {
     db.member.myInfo(message, Discord, con);
-  }
-
-  if (message.content == '!shop') {
-    db.marbles.shopList(message, Discord, con);
-  }
-
-  if (message.content.startsWith('!buy ')) {
-    db.marbles.buy(message, con);
   }
 
   if (message.content.startsWith('!giveItem ')) {
@@ -42,6 +28,26 @@ bot.on('message', (message) => {
 
   if (message.content.startsWith('!giveMarbles ')) {
     db.marbles.giveMarbles(message, con);
+  }
+
+  // shop
+
+  if (message.channel.id == '446075264791740432') {
+    if (message.content == '!shop') {
+      db.marbles.shopList(message, Discord, con);
+    }
+
+    if (message.content.startsWith('!buy ')) {
+      db.marbles.buy(message, con);
+    }
+  }
+
+  // mod commands
+
+  if (message.member.roles.has('445676592979509258')) {
+    if (message.content.startsWith('!rewardMarbles ')) {
+      db.marbles.rewardMarbles(message, con);
+    }
   }
 });
 
