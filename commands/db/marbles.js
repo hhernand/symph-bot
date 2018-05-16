@@ -3,19 +3,18 @@ const access = require('../../utils/access.js');
 
 module.exports = {
   rewardMarbles: function(msg, con) {
-    if (msg.member.roles.has('445676592979509258')) {
-      let data = msg.content.split(" ");
-      let user = data[1];
-      let add = Number(data[2]);
+    let data = msg.content.split(" ");
+    let user = data[1];
+    let add = Number(data[2]);
 
-      let sql = 'SELECT * FROM member WHERE name = "' + user + '"';
+    let sql = 'SELECT * FROM member WHERE name = "' + user + '"';
 
-      con.query(sql, (err, rows) => {
-        let total = rows[0].marbles + add;
-        sql = 'UPDATE member SET marbles = ' + total + ' WHERE name = "' + user + '"';
-        con.query(sql);
-      });
-    }
+    con.query(sql, (err, rows) => {
+      let total = rows[0].marbles + add;
+      sql = 'UPDATE member SET marbles = ' + total + ' WHERE name = "' + user + '"';
+      con.query(sql);
+      msg.channel.send(user + ' has been rewarded ' + add + ' marbles.');
+    });
   },
 
   giveMarbles: function(msg, con) {
