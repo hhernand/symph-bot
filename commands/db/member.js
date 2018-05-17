@@ -3,24 +3,27 @@ const access = require('../../utils/access.js');
 
 module.exports = {
   addMember: function(msg, con) {
-    let user = msg.content.split(" ")[1];
-    let id = msg.author.id;
+    let data = msg.content.split(" ");
+    if (data.length == 2) {
+      let user = data[1];
+      let id = msg.author.id;
 
-    access.memberByID(id, con, function(member) {
-      if (member.length == 1) {
-        let res = 'You\'re already a member!';
-        msg.channel.send(res);
-      } else {
-        let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
+      access.memberByID(id, con, function(member) {
+        if (member.length == 1) {
+          let res = 'You\'re already a member!';
+          msg.channel.send(res);
+        } else {
+          let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 0)';
 
-        con.query(sql);
+          con.query(sql);
 
-        msg.member.addRole('445705538471198743');
+          msg.member.addRole('445705538471198743');
 
-        let res = 'Added to database. Welcome to the group ' + user + '!';
-        msg.channel.send(res);
-      }
-    });
+          let res = 'Added to database. Welcome to the group ' + user + '!';
+          msg.channel.send(res);
+        }
+      });
+    }
   },
 
   myInfo: function(msg, ds, con) {
