@@ -11,21 +11,23 @@ if(process.env.JAWSDB_URL) {
 };
 
 bot.on('message', (message) => {
+  let msg = message.content.toLowerCase();
+
   // registry and member commands
 
-  if (message.content.startsWith('!add') && message.channel.id == '446074832837410826') {
+  if (msg.startsWith('!add') && message.channel.id == '446074832837410826') {
     db.member.addMember(message, con);
   }
 
-  if (message.content == '!myInfo') {
+  if (msg == '!myinfo') {
     db.member.myInfo(message, Discord, con);
   }
 
-  if (message.content.startsWith('!giveItem ')) {
+  if (msg.startsWith('!giveitem ')) {
     db.items.giveItem(message, con);
   }
 
-  if (message.content.startsWith('!giveMarbles ')) {
+  if (msg.startsWith('!givemarbles ')) {
     db.marbles.giveMarbles(message, con);
   }
 
@@ -33,7 +35,7 @@ bot.on('message', (message) => {
     db.commands.cList(message, Discord, con);
   }
 
-  if (message.content.startsWith('!commandInfo ')) {
+  if (message.content.startsWith('!commandinfo ')) {
     db.commands.cInfo(message, Discord, con);
   }
 
@@ -60,7 +62,7 @@ bot.on('message', (message) => {
   // mod commands
 
   if (message.channel.id == '445676833917108224') {
-    if (message.content.startsWith('!rewardMarbles ')) {
+    if (message.content.startsWith('!rewardmarbles ')) {
       db.marbles.rewardMarbles(message, con);
     }
 
