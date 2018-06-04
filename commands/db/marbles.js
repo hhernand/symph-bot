@@ -109,10 +109,10 @@ module.exports = {
         iName = items[i].name;
         iPrice = items[i].cost;
         if (iName.includes("Bath Bomb")) {
-          if (iPrice == 5) {
+          if (iPrice == 10) {
             common += iName + '\n';
           }
-          else if (iPrice == 10) {
+          else if (iPrice == 30) {
             uncommon += iName + '\n';
           }
           else {
@@ -130,9 +130,9 @@ module.exports = {
         .setTitle('The Bath House')
         .setFooter('To purchase an item, type !buy 1 "item". You can set the quantity.')
         .setColor('AQUA')
-        .addField('Common - 5', common, true)
-        .addField('Uncommon - 10', uncommon, true)
-        .addField('Rare - 20', rare, true)
+        .addField('Common - 10', common, true)
+        .addField('Uncommon - 30', uncommon, true)
+        .addField('Rare - 50', rare, true)
         .addField('Salts', salts, true)
         .addField('Soaps', soaps)
 
