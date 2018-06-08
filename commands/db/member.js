@@ -130,8 +130,9 @@ module.exports = {
     let id = msg.author.id;
     let num = Number(msg.content.split(' ')[1]);
 
-    if (!isNaN(want)) {
+    if (!isNaN(num)) {
       let claim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = ' + num;
+      let res = '';
 
       con.query(claim, (err, rows) => {
         if (rows.length == 1) {
@@ -143,7 +144,10 @@ module.exports = {
             item.grantItem(id, 1, con);
             let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
             con.query(entry);
+
+            res = msg.author + ' You claimed 5 marbles and a Wings Bath Bomb!';
           }
+          msg.channel.send(res);
         }
       });
     }

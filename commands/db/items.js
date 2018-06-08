@@ -81,7 +81,7 @@ module.exports = {
     con.query(alreadyHave, (err, owns) => {
       if (err) throw err;
       else if (owns.length == 1) {
-        let newItem = owns[0].quantity + want;
+        let newItem = owns[0].quantity + 1;
         let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + id + '" AND itemID = ' + item;
         con.query(updateItem);
       }
