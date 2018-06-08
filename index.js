@@ -31,30 +31,30 @@ bot.on('message', (message) => {
     db.marbles.giveMarbles(message, con);
   }
 
-  if (message.content == '!commands') {
+  if (msg == '!commands') {
     db.commands.cList(message, Discord, con);
   }
 
-  if (message.content.startsWith('!commandinfo ')) {
+  if (msg.startsWith('!commandinfo ')) {
     db.commands.cInfo(message, Discord, con);
   }
 
-  if (message.content.startsWith('!roll ')) {
+  if (msg.startsWith('!roll ')) {
     other.rng.roll(message);
   }
 
-  if (message.content.startsWith('!rng ')) {
+  if (msg.startsWith('!rng ')) {
     other.rng.rng(message);
   }
 
   // shop
 
   if (message.channel.id == '446075264791740432') {
-    if (message.content == '!shop') {
+    if (msg == '!shop') {
       db.marbles.shopList(message, Discord, con);
     }
 
-    if (message.content.startsWith('!buy ')) {
+    if (msg.startsWith('!buy ')) {
       db.marbles.buy(message, con);
     }
   }
@@ -62,15 +62,15 @@ bot.on('message', (message) => {
   // mod commands
 
   if (message.channel.id == '445676833917108224') {
-    if (message.content.startsWith('!rewardmarbles ')) {
+    if (msg.startsWith('!rewardmarbles ')) {
       db.marbles.rewardMarbles(message, con);
     }
 
-    if (message.content.startsWith('!check ')) {
+    if (msg.startsWith('!check ')) {
       db.member.checkMember(message, Discord, con);
     }
 
-    if (message.content.startsWith('!take ')) {
+    if (msg.startsWith('!take ')) {
       db.items.takeItem(message, con);
     }
   }
