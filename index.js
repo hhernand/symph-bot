@@ -47,6 +47,10 @@ bot.on('message', (message) => {
     other.rng.rng(message);
   }
 
+  if (msg.startsWith('!claim ')) {
+    db.member.claim(message, con);
+  }
+
   // shop
 
   if (message.channel.id == '446075264791740432') {

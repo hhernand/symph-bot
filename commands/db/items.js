@@ -1,4 +1,6 @@
 const access = require('../../utils/access.js');
+const marble = require('./marbles.js');
+const item = require('./items.js');
 
 module.exports = {
   giveItem: function(msg, con) {
@@ -70,6 +72,23 @@ module.exports = {
           msg.channel.send('You took ' + item + ' from ' + user + '!');
         })
       });
+    });
+  },
+
+  grantItem: function(id, item, con) {
+    let alreadyHave = 'SELECT * FROM owns WHERE memberID = "' + id + '" AND itemID = ' + item;
+
+    con.query(alreadyHave, (err, owns) => {
+      if (err) throw err;
+      else if (owns.length == 1) {
+        let newItem = owns[0].quantity + want;
+        let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + id + '" AND itemID = ' + item;
+        con.query(updateItem);
+      }
+      else {
+        let newEntry = 'INSERT INTO owns VALUES("' + id + '", ' + item + ', ' + 1 + ')';
+        con.query(newEntry);
+      }
     });
   }
 }

@@ -1,5 +1,7 @@
 const async = require('async');
 const access = require('../../utils/access.js');
+const marble = require('./marbles.js');
+const item = require('./items.js');
 
 module.exports = {
   addMember: function(msg, con) {
@@ -122,5 +124,28 @@ module.exports = {
         });
       }
     });
+  },
+
+  claim:  function(msg, con) {
+    let id = msg.author.id;
+    let num = Number(msg.content.split(' ')[1]);
+
+    if (!isNaN(want)) {
+      let claim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = ' + num;
+
+      con.query(claim, (err, rows) => {
+        if (rows.length == 1) {
+          msg.channel.send("You've already claimed the rewards for that!");
+        }
+        else {
+          if (num == 67) {
+            marble.grantMarbles(id, 5, con);
+            item.grantItem(id, 1, con);
+            let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
+            con.query(entry);
+          }
+        }
+      });
+    }
   }
 };

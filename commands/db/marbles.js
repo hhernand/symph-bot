@@ -46,6 +46,16 @@ module.exports = {
     });
   },
 
+  grantMarbles: function(id, num, con) {
+    let sql = 'SELECT * FROM member WHERE memberID = "' + id + '"';
+
+    con.query(sql, (err, rows) => {
+      let total = rows[0].marbles + num;
+      sql = 'UPDATE member SET marbles = ' + total + ' WHERE memberID = "' + id + '"';
+      con.query(sql);
+    });
+  },
+
   buy: function(msg, con) {
     let buyerID = msg.author.id;
     let want = Number(msg.content.split(' ')[1]);
