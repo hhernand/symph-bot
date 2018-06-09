@@ -130,26 +130,31 @@ module.exports = {
     let id = msg.author.id;
     let num = Number(msg.content.split(' ')[1]);
 
-    if (!isNaN(num)) {
-      let claim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = ' + num;
-      let res = '';
+    access.memberByID(id, con, function(member) {
+      if (!isNaN(num) && member.length == 1) {
+        let claim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = ' + num;
+        let res = '';
 
-      con.query(claim, (err, rows) => {
-        if (rows.length == 1) {
-          msg.channel.send("You've already claimed the rewards for that!");
-        }
-        else {
-          if (num == 67) {
-            marble.grantMarbles(id, 5, con);
-            item.grantItem(id, 1, con);
-            let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-            con.query(entry);
-
-            res = msg.author + ' You claimed 5 marbles and a Wings Bath Bomb!';
+        con.query(claim, (err, rows) => {
+          if (rows.length == 1) {
+            msg.channel.send("You've already claimed the rewards for that!");
           }
-          msg.channel.send(res);
-        }
-      });
+          else {
+            if (num == 67) {
+              marble.grantMarbles(id, 5, con);
+              item.grantItem(id, 1, con);
+              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
+              con.query(entry);
+
+              res = msg.author + ' You claimed 5 marbles and a Wings Bath Bomb!';
+            }
+            else {
+              res = msg.author + ' That\'s not a valid claim! Maybe you got the wrong number?';
+            }
+            msg.channel.send(res);
+          }
+        });
+      }
     }
   }
 };
