@@ -169,6 +169,13 @@ module.exports = {
 
               res = msg.author + ' You claimed 5 marbles!';
             }
+            else if (num == 21) {
+              marble.grantMarbles(id, 5, con);
+              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
+              con.query(entry);
+
+              res = msg.author + ' You claimed 5 marbles!';
+            }
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you got the wrong number?';
             }
