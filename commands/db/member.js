@@ -127,16 +127,16 @@ module.exports = {
   },
 
   rewardItem: function(msg, con) {
-    let user = msg.split(" ")[1];
-    let item = msg.content.split('\"')[1];
+    let user = msg.content.split(" ")[1];
+    let thing = msg.content.split('\"')[1];
     access.memberByName(user, con, function(member) {
       if (member.length == 1) {
-        access.itemByName(item, con, function(i) {
+        access.itemByName(thing, con, function(i) {
           if (i.length == 1) {
             let mID = member[0].memberID;
             let iID = i[0].itemID;
             item.grantItem(mID, iID, con);
-            msg.channel.send(user + ' has been rewarded ' + item);
+            msg.channel.send(user + ' has been rewarded ' + thing);
           }
         });
       }
