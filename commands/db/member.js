@@ -193,6 +193,13 @@ module.exports = {
 
               res = msg.author + ' You claimed 10 marbles!';
             }
+            else if (num == 22) {
+              item.grantItem(id, 8, con);
+              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
+              con.query(entry);
+
+              res = msg.author + ' You claimed a Texture Change Bath Bomb!';
+            }
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you got the wrong number?';
             }
