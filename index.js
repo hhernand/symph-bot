@@ -70,6 +70,10 @@ bot.on('message', (message) => {
       db.marbles.rewardMarbles(message, con);
     }
 
+    if (msg.startsWith('!rewarditem ')) {
+      db.member.rewardItem(message, con);
+    }
+
     if (msg.startsWith('!check ')) {
       db.member.checkMember(message, Discord, con);
     }
