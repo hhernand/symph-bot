@@ -165,41 +165,6 @@ module.exports = {
 
               res = msg.author + ' You claimed 5 marbles and a Wings Bath Bomb!';
             }
-            else if (num == 11) {
-              marble.grantMarbles(id, 5, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 5 marbles!';
-            }
-            else if (num == 15) {
-              item.grantItem(id, 13, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed a Nonsolid Bath Bomb!';
-            }
-            else if (num == 18) {
-              marble.grantMarbles(id, 5, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 5 marbles!';
-            }
-            else if (num == 21) {
-              marble.grantMarbles(id, 10, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 10 marbles!';
-            }
-            else if (num == 22) {
-              item.grantItem(id, 8, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed a Texture Change Bath Bomb!';
-            }
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you got the wrong number?';
             }
