@@ -47,9 +47,9 @@ bot.on('message', (message) => {
     other.rng.rng(message);
   }
 
-  if (msg.startsWith('!claim ')) {
+  /*if (msg.startsWith('!claim ')) {
     db.member.claim(message, con);
-  }
+  }*/
 
   // shop
 
