@@ -47,6 +47,18 @@ bot.on('message', (message) => {
     other.rng.rng(message);
   }
 
+  if (msg.startsWith('!createtag')) {
+    db.tag.createTag(message, con);
+  }
+
+  if (msg.startsWith('!t ')) {
+    db.tag.tagRes(message, con);
+  }
+
+  if (msg.startsWith('!updatetag ')) {
+    db.tag.updateTag(message, con);
+  }
+
   /*if (msg.startsWith('!claim ')) {
     db.member.claim(message, con);
   }*/

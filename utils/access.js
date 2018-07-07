@@ -69,5 +69,13 @@ module.exports = {
       if (err) callback(err);
       callback(command);
     })
-  }
+  },
+
+  tagByName: function(name, con, callback) {
+    let sql = 'SELECT * FROM tag WHERE name = "' + name + '"';
+    con.query(sql, (err, tag) => {
+      if (err) callback(err);
+      callback(tag);
+    });
+  },
 }
