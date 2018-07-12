@@ -149,7 +149,7 @@ module.exports = {
         .addField('Rare - 50', rare, true)
         .addField('Salts', salts, true)
         .addField('Soaps', soaps, true)
-        .addField('"Trash"', trash)
+        .addField('"Trash"', trash, true)
 
       msg.channel.send(embed);
     })
