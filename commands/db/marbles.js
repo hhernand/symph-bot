@@ -112,7 +112,6 @@ module.exports = {
     var rare = '';
     var salts = '';
     var soaps = '';
-    var trash = '';
     let iName = '';
     let iPrice = 0;
     access.shop(con, function(items) {
@@ -133,11 +132,8 @@ module.exports = {
         else if (iName.includes("Salts")) {
           salts += iName + ' - ' + iPrice + '\n';
         }
-        else if (iName.includes("Soap")) {
-          soaps += iName + ' - ' + iPrice + '\n';
-        }
         else {
-          trash += iName + ' - ' + iPrice + '\n';
+          soaps += iName + ' - ' + iPrice + '\n';
         }
       }
       const embed = new ds.RichEmbed()
@@ -148,8 +144,7 @@ module.exports = {
         .addField('Uncommon - 30', uncommon, true)
         .addField('Rare - 50', rare, true)
         .addField('Salts', salts, true)
-        .addField('Soaps', soaps, true)
-        .addField('"Trash"', trash)
+        .addField('Soaps', soaps)
 
       msg.channel.send(embed);
     })
