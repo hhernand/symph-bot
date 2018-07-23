@@ -110,6 +110,7 @@ module.exports = {
     var common = '';
     var uncommon = '';
     var rare = '';
+    var mutation = '';
     var salts = '';
     var soaps = '';
     var trash = '';
@@ -125,6 +126,9 @@ module.exports = {
           }
           else if (iPrice == 30) {
             uncommon += iName + '\n';
+          }
+          else if (iPrice == 150) {
+            mutation += iName + '\n';
           }
           else {
             rare += iName + '\n';
@@ -147,6 +151,7 @@ module.exports = {
         .addField('Common - 10', common, true)
         .addField('Uncommon - 30', uncommon, true)
         .addField('Rare - 50', rare, true)
+        .addField('Radioactive - 150', mutation, true)
         .addField('Salts', salts, true)
         .addField('Soaps', soaps, true)
         .addField('"Trash"', trash, true)
