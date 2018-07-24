@@ -175,7 +175,7 @@ module.exports = {
       }
       const embed = new ds.RichEmbed()
         .setTitle('The Bath House')
-        .setFooter('To purchase an item, type !buy 1 "item". You can set the quantity.')
+        .setFooter('To purchase an item, type !buy 1 item. Items can also be sold back to Izzie for 1/3 its original price using !sell 1 item. You can set the quantity.')
         .setColor('AQUA')
         .addField('Common - 10', common, true)
         .addField('Uncommon - 30', uncommon, true)
