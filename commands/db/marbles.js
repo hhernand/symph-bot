@@ -1,5 +1,6 @@
 const async = require('async');
 const access = require('../../utils/access.js');
+const helper = require('../../utils/helper.js');
 
 module.exports = {
   rewardMarbles: function(msg, con) {
@@ -60,7 +61,7 @@ module.exports = {
     let buyerID = msg.author.id;
     let want = Number(msg.content.split(' ')[1]);
     if (!isNaN(want) && want > 0) {
-      let item = msg.content.split('\"')[1];
+      let item = helper.extractItem(msg.content);
 
       let sql = 'SELECT * FROM item WHERE name = "' + item + '"';
       let res = '';

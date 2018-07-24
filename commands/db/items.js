@@ -1,4 +1,5 @@
 const access = require('../../utils/access.js');
+const helper = require('../../utils/helper.js');
 const marble = require('./marbles.js');
 const item = require('./items.js');
 
@@ -14,7 +15,7 @@ module.exports = {
           if (r.length == 0) {
             msg.channel.send('That member does not exist!');
           } else {
-            let item = msg.content.split("\"")[1];
+            let item = helper.extractItem(msg.content);
             access.itemByName(item, con, function(i) {
               if (i.length == 0) {
                 msg.channel.send('That doesn\'t exist silly!');
@@ -55,7 +56,7 @@ module.exports = {
 
   takeItem: function(msg, con) {
     let user = msg.content.split(" ")[1];
-    let item = msg.content.split('\"')[1];
+    let item = helper.extractItem(msg.content);
     access.memberByName(user, con, function(member) {
       let mID = member[0].memberID;
       access.itemByName(item, con, function(thing) {
