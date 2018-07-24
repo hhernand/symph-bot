@@ -97,11 +97,39 @@ module.exports = {
                     con.query(newEntry);
                   }
                 });
-                res = "Purchased! Be sure to use !myInfo to check if you got your items."
+                res = "You bought " + want + " " + item + " for " + (price*want) + " marbles! Be sure to use !myInfo to check if you got your items."
               }
               msg.channel.send(res);
             });
           }
+        }
+      });
+    }
+  },
+
+  sell: function(msg, con) {
+    let num = Number(msg.content.split(' ')[1]);
+    if (!isNaN(num) && num > 0) {
+      let memID = msg.author.id;
+      access.memberByID(memID, con, function(member) {
+        if (member.length == 1) {
+          let current = member[0].marbles;
+          let item = helper.extractItem(msg.content);
+          access.itemByName(item, con, function(res) {
+            if (res.length == 1) {
+              let iID = res[0].itemID;
+              let gain = Math.ceil(res[0].cost / 3);
+              access.ownsSpecific(memID, iID, con, function(res2) {
+                if (res2.length == 1) {
+                  helper.loseItem(memID, iID, con);
+                  let sql = 'UPDATE member SET marbles = ' + (current + gain) + ' WHERE memberID = "' + memID + '"';
+                  con.query(sql);
+                  let end = 'You sold ' + num + ' ' + item + ' for ' + gain + ' marbles!';
+                  msg.channel.send(end);
+                }
+              });
+            }
+          });
         }
       });
     }

@@ -73,6 +73,10 @@ bot.on('message', (message) => {
     if (msg.startsWith('!buy ')) {
       db.marbles.buy(message, con);
     }
+
+    if (msg.startsWith('!sell ')) {
+      db.marbles.sell(message, con);
+    }
   }
 
   // mod commands
