@@ -183,7 +183,7 @@ module.exports = {
         .addField('Radioactive - 150', mutation, true)
         .addField('Salts', salts, true)
         .addField('Soaps', soaps, true)
-        .addField('"Trash"', trash, true)
+        .addField('MYOs', trash, true)
 
       msg.channel.send(embed);
     })
