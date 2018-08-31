@@ -85,7 +85,7 @@ bot.on('message', (message) => {
 
   // mod commands
 
-  if (message.channel.id == '445676833917108224') {
+  if (message.channel.id == '484719843111731205') {
     if (msg.startsWith('!rewardmarbles ')) {
       db.marbles.rewardMarbles(message, con);
     }
