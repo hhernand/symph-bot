@@ -63,6 +63,10 @@ bot.on('message', (message) => {
     db.member.claim(message, con);
   }*/
 
+  if (msg.includes('izzie play despacito')) {
+    message.channel.send('https://youtu.be/bQJU82Lk79g');
+  }
+
   // shop
 
   if (message.channel.id == '446075264791740432') {
