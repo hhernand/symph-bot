@@ -75,6 +75,9 @@ module.exports = {
           }
         });
       }
+      else {
+        msg.channel.send("You haven\'t been registered yet! Please go to #registration and use **!add dAname** first.");
+      }
     });
   },
 
@@ -123,6 +126,9 @@ module.exports = {
           }
         });
       }
+      else {
+        msg.channel.send("That member doesn\'t exist.");
+      }
     });
   },
 
@@ -140,79 +146,43 @@ module.exports = {
           }
         });
       }
+      else {
+        msg.channel.send("That member doesn\'t exist.");
+      }
     });
   },
 
   claim:  function(msg, con) {
     let id = msg.author.id;
-    let num = Number(msg.content.split(' ')[1]);
+    let claim = msg.content.split(' ')[1];
 
     access.memberByID(id, con, function(member) {
-      if (!isNaN(num) && member.length == 1) {
-        let claim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = ' + num;
+      if (member.length == 1) {
+        let toclaim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = "' + claim + '"';
         let res = '';
 
-        con.query(claim, (err, rows) => {
+        con.query(toclaim, (err, rows) => {
           if (rows.length == 1) {
             msg.channel.send("You've already claimed the rewards for that!");
           }
           else {
-            if (num == 67) {
+            if (claim == 'this') {
               marble.grantMarbles(id, 5, con);
               item.grantItem(id, 1, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
+              let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 
               res = msg.author + ' You claimed 5 marbles and a Wings Bath Bomb!';
             }
-            else if (num == 11) {
-              marble.grantMarbles(id, 5, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 5 marbles!';
-            }
-            else if (num == 15) {
-              item.grantItem(id, 13, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed a Nonsolid Bath Bomb!';
-            }
-            else if (num == 18) {
-              marble.grantMarbles(id, 5, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 5 marbles!';
-            }
-            else if (num == 21) {
-              marble.grantMarbles(id, 10, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 10 marbles!';
-            }
-            else if (num == 22) {
-              item.grantItem(id, 8, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed a Texture Change Bath Bomb!';
-            }
-            else if (num == 24) {
-              marble.grantMarbles(id, 5, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", ' + num + ')';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 5 marbles!';
-            }
             else {
-              res = msg.author + ' That\'s not a valid claim! Maybe you got the wrong number?';
+              res = msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?';
             }
             msg.channel.send(res);
           }
         });
+      }
+      else {
+        msg.channel.send("You haven\'t been registered yet so you can\'t claim anything! Please go to #registration and use **!add dAname** first.");
       }
     });
   }
