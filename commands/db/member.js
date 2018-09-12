@@ -15,7 +15,7 @@ module.exports = {
           let res = 'You\'re already a member!';
           msg.channel.send(res);
         } else {
-          let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 20)';
+          let sql = 'INSERT INTO member VALUES ("' + id + '", "' + user + '", 20, 0)';
 
           con.query(sql);
 
