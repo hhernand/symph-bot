@@ -123,56 +123,61 @@ module.exports = {
   },
 
   shopList: function(msg, ds, con) {
-    var common = '';
-    var uncommon = '';
-    var rare = '';
-    var mutation = '';
-    var salts = '';
-    var soaps = '';
-    var trash = '';
-    let iName = '';
-    let iPrice = 0;
-    access.shop(con, function(items) {
-      for (let i = 0; i < items.length; i++) {
-        iName = items[i].name;
-        iPrice = items[i].cost;
-        if (iName.includes("Bath Bomb")) {
-          if (iPrice == 10) {
-            common += iName + '\n';
+    if (msg.content.split(' ')[1] == 'halloween') {
+      msg.channel.send('spooks');
+    }
+    else {
+      var common = '';
+      var uncommon = '';
+      var rare = '';
+      var mutation = '';
+      var salts = '';
+      var soaps = '';
+      var trash = '';
+      let iName = '';
+      let iPrice = 0;
+      access.shop('general' , con, function(items) {
+        for (let i = 0; i < items.length; i++) {
+          iName = items[i].name;
+          iPrice = items[i].cost;
+          if (iName.includes("Bath Bomb")) {
+            if (iPrice == 10) {
+              common += iName + '\n';
+            }
+            else if (iPrice == 30) {
+              uncommon += iName + '\n';
+            }
+            else if (iPrice == 150) {
+              mutation += iName + '\n';
+            }
+            else {
+              rare += iName + '\n';
+            }
           }
-          else if (iPrice == 30) {
-            uncommon += iName + '\n';
+          else if (iName.includes("Salts")) {
+            salts += iName + ' - ' + iPrice + '\n';
           }
-          else if (iPrice == 150) {
-            mutation += iName + '\n';
+          else if (iName.includes("Soap")) {
+            soaps += iName + ' - ' + iPrice + '\n';
           }
           else {
-            rare += iName + '\n';
+            trash += iName + ' - ' + iPrice + '\n';
           }
         }
-        else if (iName.includes("Salts")) {
-          salts += iName + ' - ' + iPrice + '\n';
-        }
-        else if (iName.includes("Soap")) {
-          soaps += iName + ' - ' + iPrice + '\n';
-        }
-        else {
-          trash += iName + ' - ' + iPrice + '\n';
-        }
-      }
-      const embed = new ds.RichEmbed()
-        .setTitle('The Bath House')
-        .setFooter('To purchase an item, type !buy 1 item. Items can also be sold back to Izzie for 1/3 its original price using !sell 1 item. You can set the quantity.')
-        .setColor('AQUA')
-        .addField('Common - 10', common, true)
-        .addField('Uncommon - 30', uncommon, true)
-        .addField('Rare - 50', rare, true)
-        .addField('Radioactive - 150', mutation, true)
-        .addField('Salts', salts, true)
-        .addField('Soaps', soaps, true)
-        .addField('MYOs', trash, true)
+        const embed = new ds.RichEmbed()
+          .setTitle('The Bath House')
+          .setFooter('To purchase an item, type !buy 1 item. Items can also be sold back to Izzie for 1/3 its original price using !sell 1 item. You can set the quantity.')
+          .setColor('AQUA')
+          .addField('Common - 10', common, true)
+          .addField('Uncommon - 30', uncommon, true)
+          .addField('Rare - 50', rare, true)
+          .addField('Radioactive - 150', mutation, true)
+          .addField('Salts', salts, true)
+          .addField('Soaps', soaps, true)
+          .addField('MYOs', trash, true)
 
-      msg.channel.send(embed);
-    })
+        msg.channel.send(embed);
+      })
+    }
   }
 }
