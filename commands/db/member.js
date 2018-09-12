@@ -135,15 +135,15 @@ module.exports = {
 
   rewardItem: function(msg, con) {
     let user = msg.content.split(" ")[1];
-    let thing = msg.content.split('\"')[1];
+    let item = helper.extractItem(msg.content);
     access.memberByName(user, con, function(member) {
       if (member.length == 1) {
-        access.itemByName(thing, con, function(i) {
+        access.itemByName(item, con, function(i) {
           if (i.length == 1) {
             let mID = member[0].memberID;
             let iID = i[0].itemID;
-            item.grantItem(mID, iID, con);
-            msg.channel.send(user + ' has been rewarded ' + thing);
+            helper.grantItem(mID, iID, con);
+            msg.channel.send(user + ' has been rewarded ' + item);
           }
         });
       }
@@ -169,7 +169,7 @@ module.exports = {
           else {
             if (claim == 'this') {
               helper.grantMarbles(id, 5, con);
-              item.grantItem(id, 1, con);
+              helper.grantItem(id, 1, con);
               let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 

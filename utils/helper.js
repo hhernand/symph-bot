@@ -25,6 +25,20 @@ module.exports = {
     })
   },
 
+  grantItem: function(id, item, con) {
+    access.ownsSpecific(id, item, con, function(owns) {
+      if (owns.length == 1) {
+        let newItem = owns[0].quantity + 1;
+        let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + id + '" AND itemID = ' + item;
+        con.query(updateItem);
+      }
+      else {
+        let newEntry = 'INSERT INTO owns VALUES("' + id + '", ' + item + ', ' + 1 + ')';
+        con.query(newEntry);
+      }
+    });
+  },
+
   grantMarbles: function(id, num, con) {
     access.memberByID(id, con, function(rows) {
       let total = rows[0].marbles + num;
