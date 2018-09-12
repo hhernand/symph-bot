@@ -1,5 +1,6 @@
 const async = require('async');
 const access = require('../../utils/access.js');
+const helper = require('../../utils/helper.js');
 const marble = require('./marbles.js');
 const item = require('./items.js');
 
@@ -167,7 +168,7 @@ module.exports = {
           }
           else {
             if (claim == 'this') {
-              marble.grantMarbles(id, 5, con);
+              helper.grantMarbles(id, 5, con);
               item.grantItem(id, 1, con);
               let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);

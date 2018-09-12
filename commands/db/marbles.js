@@ -8,12 +8,9 @@ module.exports = {
     let user = data[1];
     let add = Number(data[2]);
 
-    let sql = 'SELECT * FROM member WHERE name = "' + user + '"';
-
-    con.query(sql, (err, rows) => {
-      let total = rows[0].marbles + add;
-      sql = 'UPDATE member SET marbles = ' + total + ' WHERE name = "' + user + '"';
-      con.query(sql);
+    access.memberByName(user, con, function(rows) {
+      let id = rows[0].memberID;
+      helper.grantMarbles(id, add, con);
       msg.channel.send(user + ' has been rewarded ' + add + ' marbles.');
     });
   },
@@ -44,16 +41,6 @@ module.exports = {
           }
         });
       }
-    });
-  },
-
-  grantMarbles: function(id, num, con) {
-    let sql = 'SELECT * FROM member WHERE memberID = "' + id + '"';
-
-    con.query(sql, (err, rows) => {
-      let total = rows[0].marbles + num;
-      sql = 'UPDATE member SET marbles = ' + total + ' WHERE memberID = "' + id + '"';
-      con.query(sql);
     });
   },
 
