@@ -36,7 +36,6 @@ module.exports = {
       if (member.length == 1) {
         let user = member[0].name;
         let num = member[0].marbles;
-        let can = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
@@ -70,7 +69,6 @@ module.exports = {
                 .setThumbnail(msg.author.avatarURL)
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
-                .addField('Candies', can, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
