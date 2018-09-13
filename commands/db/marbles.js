@@ -3,18 +3,6 @@ const access = require('../../utils/access.js');
 const helper = require('../../utils/helper.js');
 
 module.exports = {
-  rewardMarbles: function(msg, con) {
-    let data = msg.content.split(" ");
-    let user = data[1];
-    let add = Number(data[2]);
-
-    access.memberByName(user, con, function(rows) {
-      let id = rows[0].memberID;
-      helper.grantMarbles(id, add, con);
-      msg.channel.send(user + ' has been rewarded ' + add + ' marbles.');
-    });
-  },
-
   giveMarbles: function(msg, con) {
     let giverID = msg.author.id;
     access.memberByID(giverID, con, function(g) {
@@ -50,23 +38,32 @@ module.exports = {
     if (!isNaN(want) && want > 0) {
       let item = helper.extractItem(msg.content);
 
-      let sql = 'SELECT * FROM item WHERE name = "' + item + '"';
-      let res = '';
-
-      con.query(sql, (err, items) => {
-        if (err) throw err;
-        else if (items.length == 0) msg.channel.send('That item is not in the shop!');
+      access.itemByName(item, con, function(items) {
+        if (items.length == 0) msg.channel.send('That item is not in the shop!');
         else {
           let price = items[0].cost;
           if (price != 0) {
             access.memberByID(buyerID, con, function(buyer) {
-              let num = buyer[0].marbles;
-              if ((price*want) > num) {
-                // not enough marbles
-                res = "Nice try, but you don't have enough marbles!";
+              let num = 0;
+              let curr = '';
+
+              if (items[0].type == 'halloween') {
+                num = buyer[0].candies;
+                curr = 'candies!';
               }
               else {
-                helper.grantMarbles(buyerID, -Math.abs(price*want), con);
+                num = buyer[0].marbles;
+                curr = 'marbles!'
+              }
+
+              if ((price*want) > num) {
+                // not enough marbles
+                res = "Nice try, but you don't have enough " + curr;
+              }
+              else {
+                if (curr = 'candies!') helper.grantCandies(buyerID, -Math.abs(price*want), con);
+                else helper.grantMarbles(buyerID, -Math.abs(price*want), con);
+
                 helper.grantItem(buyerID, items[0].itemID, want, con);
 
                 res = "You bought " + want + " " + item + " for " + (price*want) + " marbles! Be sure to use !myInfo to check if you got your items."

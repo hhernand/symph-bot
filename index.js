@@ -86,12 +86,8 @@ bot.on('message', (message) => {
   // mod commands
 
   if (message.channel.id == '484719843111731205') {
-    if (msg.startsWith('!rewardmarbles ')) {
-      db.marbles.rewardMarbles(message, con);
-    }
-
-    if (msg.startsWith('!rewarditem ')) {
-      db.member.rewardItem(message, con);
+    if (msg.startsWith('!reward')) {
+      db.member.reward(message, con);
     }
 
     if (msg.startsWith('!check ')) {

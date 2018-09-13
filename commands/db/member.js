@@ -36,6 +36,7 @@ module.exports = {
       if (member.length == 1) {
         let user = member[0].name;
         let num = member[0].marbles;
+        let can = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
@@ -69,6 +70,7 @@ module.exports = {
                 .setThumbnail(msg.author.avatarURL)
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
+                .addField('Candies', can, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -133,23 +135,40 @@ module.exports = {
     });
   },
 
-  rewardItem: function(msg, con) {
-    let user = msg.content.split(" ")[1];
-    let item = helper.extractItem(msg.content);
+  reward: function(msg, con) {
+    let data = msg.content.split(" ");
+    let user = data[1];
+    let type = data[0].split('!reward')[1];
+
     access.memberByName(user, con, function(member) {
       if (member.length == 1) {
-        access.itemByName(item, con, function(i) {
-          if (i.length == 1) {
-            let mID = member[0].memberID;
-            let iID = i[0].itemID;
-            helper.grantItem(mID, iID, 1, con);
-            msg.channel.send(user + ' has been rewarded ' + item);
+        let mID = member[0].memberID;
+        if (type == 'item') {
+          let item = helper.extractItem(msg.content);
+          access.itemByName(item, con, function(items){
+            if (items.length == 1) {
+              let iID = items[0].itemID;
+              helper.grantItem(mID, iID, 1, con);
+              msg.channel.send(user + ' has been rewarded ' + item);
+            }
+          })
+        }
+        else {
+          let add = Number(data[2]);
+          if (!isNaN(want) && want > 0) {
+            if (type == 'candies') {
+              helper.grantCandies(mID, add, con);
+              msg.channel.send(user + ' has been rewarded ' + add + ' candies.');
+            }
+            else if (type == 'marbles') {
+              helper.grantMarbles(mID, add, con);
+              msg.channel.send(user + ' has been rewarded ' + add + ' marbles.');
+            }
+            else msg.channel.send('Please redo that command!');
           }
-        });
+        }
       }
-      else {
-        msg.channel.send("That member doesn\'t exist.");
-      }
+      else msg.channel.send('That member doesn\'t exist!');
     });
   },
 

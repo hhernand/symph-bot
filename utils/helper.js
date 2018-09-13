@@ -45,5 +45,13 @@ module.exports = {
       sql = 'UPDATE member SET marbles = ' + total + ' WHERE memberID = "' + id + '"';
       con.query(sql);
     });
+  },
+
+  grantCandies: function(id, num, con) {
+    access.memberByID(id, con, function(rows) {
+      let total = rows[0].candies + num;
+      sql = 'UPDATE member SET candies = ' + total + ' WHERE memberID = "' + id + '"';
+      con.query(sql);
+    });
   }
 }
