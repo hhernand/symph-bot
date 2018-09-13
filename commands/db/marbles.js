@@ -66,24 +66,9 @@ module.exports = {
                 res = "Nice try, but you don't have enough marbles!";
               }
               else {
-                let newTotal = num - (price*want);
-                let updateMarbles = 'UPDATE member SET marbles = ' + newTotal + ' WHERE memberID = "' + buyerID + '"';
-                con.query(updateMarbles);
+                helper.grantMarbles(buyerID, -Math.abs(price*want), con);
+                helper.grantItem(buyerID, items[0].itemID, want, con);
 
-                let alreadyHave = 'SELECT * FROM owns WHERE memberID = "' + buyerID + '" AND itemID = ' + items[0].itemID;
-
-                con.query(alreadyHave, (err2, owns) => {
-                  if (err2) throw err2;
-                  else if (owns.length == 1) {
-                    let newItem = owns[0].quantity + want;
-                    let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + buyerID + '" AND itemID = ' + items[0].itemID;
-                    con.query(updateItem);
-                  }
-                  else {
-                    let newEntry = 'INSERT INTO owns VALUES("' + buyerID + '", ' + items[0].itemID + ', ' + want + ')';
-                    con.query(newEntry);
-                  }
-                });
                 res = "You bought " + want + " " + item + " for " + (price*want) + " marbles! Be sure to use !myInfo to check if you got your items."
               }
               msg.channel.send(res);

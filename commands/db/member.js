@@ -142,7 +142,7 @@ module.exports = {
           if (i.length == 1) {
             let mID = member[0].memberID;
             let iID = i[0].itemID;
-            helper.grantItem(mID, iID, con);
+            helper.grantItem(mID, iID, 1, con);
             msg.channel.send(user + ' has been rewarded ' + item);
           }
         });
@@ -169,7 +169,7 @@ module.exports = {
           else {
             if (claim == 'this') {
               helper.grantMarbles(id, 5, con);
-              helper.grantItem(id, 1, con);
+              helper.grantItem(id, 1, 1, con);
               let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 

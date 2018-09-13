@@ -25,15 +25,15 @@ module.exports = {
     })
   },
 
-  grantItem: function(id, item, con) {
+  grantItem: function(id, item, num, con) {
     access.ownsSpecific(id, item, con, function(owns) {
       if (owns.length == 1) {
-        let newItem = owns[0].quantity + 1;
+        let newItem = owns[0].quantity + num;
         let updateItem = 'UPDATE owns SET quantity = ' + newItem + ' WHERE memberID = "' + id + '" AND itemID = ' + item;
         con.query(updateItem);
       }
       else {
-        let newEntry = 'INSERT INTO owns VALUES("' + id + '", ' + item + ', ' + 1 + ')';
+        let newEntry = 'INSERT INTO owns VALUES("' + id + '", ' + item + ', ' + num + ')';
         con.query(newEntry);
       }
     });
