@@ -153,7 +153,7 @@ module.exports = {
         }
         else {
           let add = Number(data[2]);
-          if (!isNaN(want) && want > 0) {
+          if (!isNaN(add) && add > 0) {
             if (type == 'candies') {
               helper.grantCandies(mID, add, con);
               msg.channel.send(user + ' has been rewarded ' + add + ' candies.');
