@@ -61,8 +61,8 @@ module.exports = {
                 res = "Nice try, but you don't have enough " + curr;
               }
               else {
-                if (curr = 'candies!') helper.grantCandies(buyerID, -Math.abs(price*want), con);
-                else helper.grantMarbles(buyerID, -Math.abs(price*want), con);
+                if (curr = 'candies!') helper.grantCandies(buyerID, (price*want*-1), con);
+                else helper.grantMarbles(buyerID, (price*want*-1), con);
 
                 helper.grantItem(buyerID, items[0].itemID, want, con);
 
