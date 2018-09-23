@@ -15,7 +15,7 @@ bot.on('message', (message) => {
 
   // registry and member commands
 
-  if (msg.startsWith('!add') && message.channel.id == '446074832837410826') {
+  if (msg.startsWith('!add') && (message.channel.id == '446074832837410826' || message.channel.id == '493447292502933504')) {
     db.member.addMember(message, con);
   }
 
@@ -59,9 +59,9 @@ bot.on('message', (message) => {
     db.tag.updateTag(message, con);
   }
 
-  /*if (msg.startsWith('!claim ')) {
+  if (msg.startsWith('!claim ')) {
     db.member.claim(message, con);
-  }*/
+  }
 
   if (msg.includes('izzie play despacito')) {
     message.channel.send('https://youtu.be/bQJU82Lk79g');
@@ -69,7 +69,7 @@ bot.on('message', (message) => {
 
   // shop
 
-  if (message.channel.id == '446075264791740432') {
+  if (message.channel.id == '446075264791740432' || message.channel.id == '493447292502933504') {
     if (msg.startsWith('!shop')) {
       db.marbles.shopList(message, Discord, con);
     }
