@@ -186,7 +186,7 @@ module.exports = {
           else {
             if (claim == 'botgoodies') {
               helper.grantMarbles(id, 20, con);
-              helper.grantItem(id, 1, 8, con);
+              helper.grantItem(id, 8, 1, con);
               let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 
