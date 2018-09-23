@@ -184,13 +184,13 @@ module.exports = {
             msg.channel.send("You've already claimed the rewards for that!");
           }
           else {
-            if (claim == 'this') {
-              helper.grantMarbles(id, 5, con);
-              helper.grantItem(id, 1, 1, con);
+            if (claim == 'botgoodies') {
+              helper.grantMarbles(id, 20, con);
+              helper.grantItem(id, 1, 8, con);
               let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 
-              res = msg.author + ' You claimed 5 marbles and a Wings Bath Bomb!';
+              res = msg.author + ' You claimed 20 marbles and a Texture Change Bath Bomb!';
             }
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?';
