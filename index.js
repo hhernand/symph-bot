@@ -67,6 +67,14 @@ bot.on('message', (message) => {
     message.channel.send('https://youtu.be/bQJU82Lk79g');
   }
 
+  // roles
+
+  if (message.channel.id == '494591194026999820') {
+    if (msg.startsWith('!assign ')){
+      other.roles.assign(message);
+    }
+  }
+
   // shop
 
   if (message.channel.id == '446075264791740432' || message.channel.id == '493447292502933504') {
