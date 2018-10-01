@@ -105,8 +105,7 @@ module.exports = {
   },
 
   shopList: function(msg, ds, con) {
-    if (msg.content.split(' ')[1] == 'halloween') {
-      //msg.channel.send('spooks');
+    if (msg.content.split(' ')[1].toLowerCase() == 'halloween') {
       let c = '';
       let uc = '';
       let r = '';

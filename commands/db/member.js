@@ -142,7 +142,7 @@ module.exports = {
   reward: function(msg, con) {
     let data = msg.content.split(" ");
     let user = data[1];
-    let type = data[0].split('!reward')[1];
+    let type = data[0].split('!reward')[1].toLowerCase();
 
     access.memberByName(user, con, function(member) {
       if (member.length == 1) {
