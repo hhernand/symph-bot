@@ -66,7 +66,7 @@ module.exports = {
 
                 helper.grantItem(buyerID, items[0].itemID, want, con);
 
-                res = "You bought " + want + " " + item + " for " + (price*want) + " marbles! Be sure to use !myInfo to check if you got your items."
+                res = "You bought " + want + " " + item + " for " + (price*want) + " " + curr + " Be sure to use !myinfo to check if you got your items."
               }
               msg.channel.send(res);
             });
@@ -106,7 +106,27 @@ module.exports = {
 
   shopList: function(msg, ds, con) {
     if (msg.content.split(' ')[1] == 'halloween') {
-      msg.channel.send('spooks');
+      //msg.channel.send('spooks');
+      let c = '';
+      let uc = '';
+      let r = '';
+      access.shop('halloween', con, function(items) {
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].cost == 10) c += items[i].name + '\n';
+          else if (items[i].cost == 30) uc += items[i].name + '\n';
+          else r += items[i].name + '\n';
+        }
+        const embedHal = new ds.RichEmbed()
+          .setTitle('The Bath House - Halloween Special!')
+          .setDescription('Items can only be purchased with candy.')
+          .setFooter('To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.')
+          .setColor('ORANGE')
+          .addField('Common - 10', c)
+          .addField('Uncommon - 30', uc)
+          .addField('Rare - 50', r)
+
+        msg.channel.send(embedHal);
+      })
     }
     else {
       var common = '';
