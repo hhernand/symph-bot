@@ -36,6 +36,7 @@ module.exports = {
       if (member.length == 1) {
         let user = member[0].name;
         let num = member[0].marbles;
+        let c = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
@@ -44,7 +45,8 @@ module.exports = {
               .setColor('BLUE')
               .setThumbnail(msg.author.avatarURL)
               .addField('DA Username', user, true)
-              .addField('Marbles', num, true);
+              .addField('Marbles', num, true)
+              .addField('Candies', c, true);
 
             msg.channel.send(embed);
           }
@@ -69,6 +71,7 @@ module.exports = {
                 .setThumbnail(msg.author.avatarURL)
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
+                .addField('Candies', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -89,6 +92,7 @@ module.exports = {
       if (member.length == 1) {
         let id = member[0].memberID;
         let num = member[0].marbles;
+        let c = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
@@ -96,7 +100,8 @@ module.exports = {
               .setTitle('Member Information')
               .setColor('BLUE')
               .addField('DA Username', user, true)
-              .addField('Marbles', num, true);
+              .addField('Marbles', num, true)
+              .addField('Candies', c, true);
 
             msg.channel.send(embed);
           }
@@ -120,6 +125,7 @@ module.exports = {
                 .setColor('BLUE')
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
+                .addField('Candies', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
