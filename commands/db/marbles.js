@@ -105,7 +105,7 @@ module.exports = {
   },
 
   shopList: function(msg, ds, con) {
-    if (msg.content.split(' ')[1].toLowerCase() == 'halloween') {
+    if (!isNaN(msg.content.split(' ')[1]) && msg.content.split(' ')[1].toLowerCase() == 'halloween') {
       let c = '';
       let uc = '';
       let r = '';
