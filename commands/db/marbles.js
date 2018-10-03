@@ -105,27 +105,32 @@ module.exports = {
   },
 
   shopList: function(msg, ds, con) {
-    if (!isNaN(msg.content.split(' ')[1]) && msg.content.split(' ')[1].toLowerCase() == 'halloween') {
-      let c = '';
-      let uc = '';
-      let r = '';
-      access.shop('halloween', con, function(items) {
-        for (let i = 0; i < items.length; i++) {
-          if (items[i].cost == 10) c += items[i].name + '\n';
-          else if (items[i].cost == 30) uc += items[i].name + '\n';
-          else r += items[i].name + '\n';
-        }
-        const embedHal = new ds.RichEmbed()
-          .setTitle('The Bath House - Halloween Special!')
-          .setDescription('Items can only be purchased with candy.')
-          .setFooter('To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.')
-          .setColor('ORANGE')
-          .addField('Common - 10', c)
-          .addField('Uncommon - 30', uc)
-          .addField('Rare - 50', r)
+    if (msg.content.split(' ').length == 2) {
+      if (msg.content.split(' ')[1].toLowerCase() == 'halloween') {
+        let c = '';
+        let uc = '';
+        let r = '';
+        access.shop('halloween', con, function(items) {
+          for (let i = 0; i < items.length; i++) {
+            if (items[i].cost == 10) c += items[i].name + '\n';
+            else if (items[i].cost == 30) uc += items[i].name + '\n';
+            else r += items[i].name + '\n';
+          }
+          const embedHal = new ds.RichEmbed()
+            .setTitle('The Bath House - Halloween Special!')
+            .setDescription('Items can only be purchased with candy.')
+            .setFooter('To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.')
+            .setColor('ORANGE')
+            .addField('Common - 10', c)
+            .addField('Uncommon - 30', uc)
+            .addField('Rare - 50', r)
 
-        msg.channel.send(embedHal);
-      })
+          msg.channel.send(embedHal);
+        })
+      }
+      else {
+        msg.channel.send('Sorry! That section of the shop doesn\'t exist.');
+      }
     }
     else {
       var common = '';
