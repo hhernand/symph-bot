@@ -198,6 +198,13 @@ module.exports = {
 
               res = msg.author + ' You claimed 20 marbles and a Texture Change Bath Bomb!';
             }
+            else if (claim == 'spoopy') {
+              helper.grantCandies(id, 10, con);
+              let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
+              con.query(entry);
+
+              res = msg.author + ' You claimed 10 candies!';
+            }
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?';
             }
