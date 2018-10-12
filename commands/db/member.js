@@ -205,6 +205,13 @@ module.exports = {
 
               res = msg.author + ' You claimed 10 candies!';
             }
+            else if (claim == 'candycorn') {
+              helper.grantItem(id, 46, 1, con);
+              let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
+              con.query(entry);
+
+              res = msg.author + ' You claimed a Floating Limbs Bath Bomb!';
+            }
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?';
             }
