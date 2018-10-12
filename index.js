@@ -26,9 +26,8 @@ bot.on('message', (message) => {
   if (msg.startsWith('!giveitem ')) {
     db.items.giveItem(message, con);
   }
-
-  if (msg.startsWith('!givemarbles ')) {
-    db.marbles.giveMarbles(message, con);
+  else if (msg.startsWith('!give')) {
+    db.marbles.giveCurrency(message, con);
   }
 
   if (msg == '!commands') {

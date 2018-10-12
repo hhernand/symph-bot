@@ -3,7 +3,10 @@ const access = require('../../utils/access.js');
 const helper = require('../../utils/helper.js');
 
 module.exports = {
-  giveMarbles: function(msg, con) {
+  giveCurrency: function(msg, con) {
+    let data = msg.content.split(" ");
+    let type = data[0].split('!give')[1].toLowerCase();
+
     let giverID = msg.author.id;
     access.memberByID(giverID, con, function(g) {
       if (g.length == 0) {
@@ -16,14 +19,29 @@ module.exports = {
           } else {
             if (!isNaN(msg.content.split(" ")[2])) {
               let amount = Number(msg.content.split(" ")[2]);
-              if (g[0].marbles < amount) {
-                msg.channel.send('You don\'t have enough marbles to give!');
-              } else {
-                let sql = 'UPDATE member SET marbles = ' + (g[0].marbles - amount) + ' WHERE memberID = "' + giverID + '"';
-                let sql2 = 'UPDATE member SET marbles = ' + (r[0].marbles + amount) + ' WHERE memberID = "' + r[0].memberID + '"';
-                con.query(sql);
-                con.query(sql2);
-                msg.channel.send('You gave ' + amount + ' marbles to ' + receiver + '!');
+
+              if (type == 'marbles') {
+                if (g[0].marbles < amount) {
+                  msg.channel.send('You don\'t have enough marbles to give!');
+                }
+                else {
+                  helper.grantMarbles(giverID, (amount*-1), con);
+                  helper.grantMarbles(r[0].memberID, amount, con);
+                  msg.channel.send('You gave ' + amount + ' marbles to ' + receiver + '!');
+                }
+              }
+              else if (type == 'candies') {
+                if (g[0].candies < amount) {
+                  msg.channel.send('You don\'t have enough candies to give!');
+                }
+                else {
+                  helper.grantCandies(giverID, (amount*-1), con);
+                  helper.grantCandies(r[0].memberID, amount, con);
+                  msg.channel.send('You gave ' + amount + ' candies to ' + receiver + '!');
+                }
+              }
+              else {
+                msg.channel.send('Please redo the command.');
               }
             }
           }
