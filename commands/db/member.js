@@ -193,21 +193,21 @@ module.exports = {
             if (claim == 'botgoodies') {
               helper.grantMarbles(id, 20, con);
               helper.grantItem(id, 8, 1, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
+              let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 
               res = msg.author + ' You claimed 20 marbles and a Texture Change Bath Bomb!';
             }
             else if (claim == 'spoopy' || claim == 'zombo') {
               helper.grantCandies(id, 10, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
+              let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 
               res = msg.author + ' You claimed 10 candies!';
             }
             else if (claim == 'candycorn') {
               helper.grantItem(id, 46, 1, con);
-              let entry = 'INSERT INTO claimed VALUES ("' + id + '", "' + claim + '")';
+              let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
 
               res = msg.author + ' You claimed a Floating Limbs Bath Bomb!';
