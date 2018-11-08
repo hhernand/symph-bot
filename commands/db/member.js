@@ -178,46 +178,61 @@ module.exports = {
 
   claim:  function(msg, con) {
     let id = msg.author.id;
-    let claim = msg.content.split(' ')[1];
+    let word = msg.content.split(' ')[1];
 
     access.memberByID(id, con, function(member) {
       if (member.length == 1) {
-        let toclaim = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claim = "' + claim + '"';
-        let res = '';
+        access.claimByWord(word, con, function(claim){
+          if (claim.length == 1) {
+            access.claimed(id, claim[0].claimID, con, function(claimed){
+              if (claimed.length == 0) {
+                let d = new Date();
+                let ddate = d.getDate();
+                let dmonth = d.getMonth();
+                let dyear = d.getFullYear();
 
-        con.query(toclaim, (err, rows) => {
-          if (rows.length == 1) {
-            msg.channel.send("You've already claimed the rewards for that!");
+                let adate = claim[0].active.getDate();
+                let amonth = claim[0].active.getMonth();
+                let ayear = claim[0].active.getFullYear();
+
+                let res = 0;
+
+                if (dyear >= ayear && dmonth >= amonth && ddate >= adate) {
+                  if (!isNaN(claim[0].inactive)) {
+                    res = 1;
+                  }
+                  else {
+                    let idate = claim[0].inactive.getDate();
+                    let imonth = claim[0].inactive.getMonth();
+                    let iyear = claim[0].inactive.getFullYear();
+
+                    if (dyear <= iyear && dmonth <= imonth && ddate < idate) {
+                      res = 1;
+                    }
+                    else res = 2;
+                  }
+                }
+
+                switch (res) {
+                  case 0:
+                    msg.channel.send('Little too early for that! Gotta wait until ' + amonth+1 + '/' + adate + '/' + ayear + ' to make that claim.');
+                    break;
+                  case 1:
+                    eval(claim[0].func);
+                    let sql = 'INSERT INTO claimed VALUES("' + id + '", ' + claim[0].claimID + ')';
+                    con.query(sql);
+                    msg.channel.send(msg.author + ' You claimed ' + claim[0].reward + '!');
+                    break;
+                  default:
+                    msg.channel.send('Missed your chance sorry! That claim closed on ' + imonth+1 + '/' + idate + '/' + iyear + '.');
+                }
+              }
+              else {
+                msg.channel.send("You've already claimed the rewards for that!");
+              }
+            })
           }
-          else {
-            if (claim == 'botgoodies') {
-              helper.grantMarbles(id, 20, con);
-              helper.grantItem(id, 8, 1, con);
-              let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 20 marbles and a Texture Change Bath Bomb!';
-            }
-            /*else if (claim == 'spoopy' || claim == 'zombo') {
-              helper.grantCandies(id, 10, con);
-              let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
-              con.query(entry);
-
-              res = msg.author + ' You claimed 10 candies!';
-            }
-            else if (claim == 'candycorn') {
-              helper.grantItem(id, 46, 1, con);
-              let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
-              con.query(entry);
-
-              res = msg.author + ' You claimed a Floating Limbs Bath Bomb!';
-            }*/
-            else {
-              res = msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?';
-            }
-            msg.channel.send(res);
-          }
-        });
+        })
       }
       else {
         msg.channel.send("You haven\'t been registered yet so you can\'t claim anything! Please go to #registration and use **!add dAname** first.");
