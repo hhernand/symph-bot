@@ -104,6 +104,10 @@ bot.on('message', (message) => {
     if (msg.startsWith('!take ')) {
       db.items.takeItem(message, con);
     }
+
+    if (msg == '!convert') {
+      db.member.convert(message, con);
+    }
   }
 });
 

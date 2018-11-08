@@ -1,4 +1,12 @@
 module.exports = {
+  members: function(con, callback) {
+    let sql = 'SELECT * FROM member';
+    con.query(sql, (err, member) => {
+      if (err) throw err;
+      else callback(member);
+    })
+  },
+
   memberByID: function(id, con, callback) {
     let sql = 'SELECT * FROM member WHERE memberID = "' + id + '"';
     con.query(sql, (err, member) => {
@@ -78,4 +86,20 @@ module.exports = {
       else callback(tag);
     });
   },
+
+  claimByWord: function(word, con, callback) {
+    let sql = 'SELECT * FROM claim WHERE word = "' + word + '"';
+    con.query(sql, (err, claim) => {
+      if (err) throw err;
+      else callback(claim);
+    });
+  },
+
+  claimed: function(id, claimID, con, callback) {
+    let sql = 'SELECT * FROM claimed WHERE memberID = "' + id + '" AND claimID = ' + claimID;
+    con.query(sql, (err, claimed) => {
+      if (err) throw err;
+      else callback(claimed);
+    });
+  }
 }

@@ -36,7 +36,7 @@ module.exports = {
       if (member.length == 1) {
         let user = member[0].name;
         let num = member[0].marbles;
-        let c = member[0].candies;
+        //let c = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
@@ -46,7 +46,7 @@ module.exports = {
               .setThumbnail(msg.author.avatarURL)
               .addField('DA Username', user, true)
               .addField('Marbles', num, true)
-              .addField('Candies', c, true);
+              //.addField('Candies', c, true);
 
             msg.channel.send(embed);
           }
@@ -71,7 +71,7 @@ module.exports = {
                 .setThumbnail(msg.author.avatarURL)
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
-                .addField('Candies', c, true)
+                //.addField('Candies', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -92,7 +92,7 @@ module.exports = {
       if (member.length == 1) {
         let id = member[0].memberID;
         let num = member[0].marbles;
-        let c = member[0].candies;
+        //let c = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
@@ -101,7 +101,7 @@ module.exports = {
               .setColor('BLUE')
               .addField('DA Username', user, true)
               .addField('Marbles', num, true)
-              .addField('Candies', c, true);
+              //.addField('Candies', c, true);
 
             msg.channel.send(embed);
           }
@@ -125,7 +125,7 @@ module.exports = {
                 .setColor('BLUE')
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
-                .addField('Candies', c, true)
+                //.addField('Candies', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -161,8 +161,8 @@ module.exports = {
           let add = Number(data[2]);
           if (!isNaN(add) && add > 0) {
             if (type == 'candies') {
-              helper.grantCandies(mID, add, con);
-              msg.channel.send(user + ' has been rewarded ' + add + ' candies.');
+              //helper.grantCandies(mID, add, con);
+              msg.channel.send('Pst halloween ended.');
             }
             else if (type == 'marbles') {
               helper.grantMarbles(mID, add, con);
@@ -198,7 +198,7 @@ module.exports = {
 
               res = msg.author + ' You claimed 20 marbles and a Texture Change Bath Bomb!';
             }
-            else if (claim == 'spoopy' || claim == 'zombo') {
+            /*else if (claim == 'spoopy' || claim == 'zombo') {
               helper.grantCandies(id, 10, con);
               let entry = 'INSERT INTO claimed (memberID, claim) VALUES ("' + id + '", "' + claim + '")';
               con.query(entry);
@@ -211,7 +211,7 @@ module.exports = {
               con.query(entry);
 
               res = msg.author + ' You claimed a Floating Limbs Bath Bomb!';
-            }
+            }*/
             else {
               res = msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?';
             }
@@ -223,5 +223,19 @@ module.exports = {
         msg.channel.send("You haven\'t been registered yet so you can\'t claim anything! Please go to #registration and use **!add dAname** first.");
       }
     });
+  },
+
+  convert: function(msg, con) {
+    access.members(con, function(member){
+      let sql = '';
+      let sql2 = '';
+      for (i = 0; i < member.length; i++) {
+        sql = 'UPDATE member SET marbles = ' + (member[i].marbles + member[i].candies) + ' WHERE memberID = "' + member[i].memberID + '"';
+        sql2 = 'UPDATE member SET candies = 0 WHERE memberID = "' + member[i].memberID + '"';
+        con.query(sql);
+        con.query(sql2);
+      }
+      msg.channel.send('All candies have been converted into marbles');
+    })
   }
 };
