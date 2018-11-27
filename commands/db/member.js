@@ -215,7 +215,7 @@ module.exports = {
 
                 switch (res) {
                   case 0:
-                    msg.channel.send('Little too early for that! Gotta wait until ' + amonth+1 + '/' + adate + '/' + ayear + ' to make that claim.');
+                    msg.channel.send('Little too early for that! Gotta wait until ' + Number(amonth)+1 + '/' + adate + '/' + ayear + ' to make that claim.');
                     break;
                   case 1:
                     eval(claim[0].func);
@@ -224,13 +224,16 @@ module.exports = {
                     msg.channel.send(msg.author + ' You claimed ' + claim[0].reward + '!');
                     break;
                   default:
-                    msg.channel.send('Missed your chance sorry! That claim closed on ' + imonth+1 + '/' + idate + '/' + iyear + '.');
+                    msg.channel.send('Missed your chance sorry! That claim closed on ' + Number(imonth)+1 + '/' + idate + '/' + iyear + '.');
                 }
               }
               else {
                 msg.channel.send("You've already claimed the rewards for that!");
               }
             })
+          }
+          else {
+            msg.channel.send(msg.author + ' That\'s not a valid claim! Maybe you typed the wrong thing?');
           }
         })
       }
