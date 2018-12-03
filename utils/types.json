@@ -1,0 +1,24 @@
+{
+  "general": {
+    "name": "The Bath House",
+    "description": "",
+    "colour": "AQUA",
+    "footer": "To purchase an item, type !buy 1 item. Items can also be sold back to Izzie for 1/3 its original price using !sell 1 item. You can set the quantity."
+    },
+  "halloween": {
+    "name": "The Bath House - Halloween Special!",
+    "description": "Items can only be purchased with candy.",
+    "colour": "ORANGE",
+    "footer": "To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.",
+    "month": 9,
+    "currency": "candies"
+    },
+  "holiday": {
+    "name": "The Bath House - Holiday Special!",
+    "description": "Items can only be purchased with snowflakes.",
+    "colour": "GREEN",
+    "footer": "To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.",
+    "month": 11,
+    "currency": "snowflakes"
+  }
+}

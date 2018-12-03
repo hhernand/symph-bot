@@ -3,6 +3,7 @@ const access = require('../../utils/access.js');
 const helper = require('../../utils/helper.js');
 const marble = require('./marbles.js');
 const item = require('./items.js');
+const types = require('../../utils/types.json');
 
 module.exports = {
   addMember: function(msg, con) {
@@ -36,21 +37,24 @@ module.exports = {
       if (member.length == 1) {
         let user = member[0].name;
         let num = member[0].marbles;
-        //let c = member[0].candies;
+        let c = member[0].candies;
+
+        const embed = new ds.RichEmbed()
+          .setTitle(msg.author.username)
+          .setColor('BLUE')
+          .setThumbnail(msg.author.avatarURL)
+          .addField('DA Username', user, true)
+          .addField('Marbles', num, true)
+
+        let date = new Date();
+        for (let type in types) {
+          if ( 'month' in types[type] && types[type].month == date.getMonth()) {
+            embed.addField(types[type].currency[0].toUpperCase()+types[type].currency.substr(1), c, true);
+          }
+        }
 
         access.owns(id, con, function(owned) {
-          if (owned.length == 0) {
-            const embed = new ds.RichEmbed()
-              .setTitle(msg.author.username)
-              .setColor('BLUE')
-              .setThumbnail(msg.author.avatarURL)
-              .addField('DA Username', user, true)
-              .addField('Marbles', num, true)
-              //.addField('Candies', c, true);
-
-            msg.channel.send(embed);
-          }
-          else {
+          if (owned.length != 0) {
             var res = '';
             var q = '';
 
@@ -65,17 +69,11 @@ module.exports = {
               q = '';
             },
             function(err, owned) {
-              const embed = new ds.RichEmbed()
-                .setTitle(msg.author.username)
-                .setColor('BLUE')
-                .setThumbnail(msg.author.avatarURL)
-                .addField('DA Username', user, true)
-                .addField('Marbles', num, true)
-                //.addField('Candies', c, true)
-                .addField('Items', res);
-
+              embed.addField('Items', res);
               msg.channel.send(embed);
             });
+          } else {
+            msg.channel.send(embed);
           }
         });
       }
@@ -101,7 +99,7 @@ module.exports = {
               .setColor('BLUE')
               .addField('DA Username', user, true)
               .addField('Marbles', num, true)
-              //.addField('Candies', c, true);
+              .addField('Snowflakes', c, true);
 
             msg.channel.send(embed);
           }
@@ -125,7 +123,7 @@ module.exports = {
                 .setColor('BLUE')
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
-                //.addField('Candies', c, true)
+                .addField('Snowflakes', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -160,11 +158,18 @@ module.exports = {
         else {
           let add = Number(data[2]);
           if (!isNaN(add) && add > 0) {
-            if (type == 'candies') {
-              //helper.grantCandies(mID, add, con);
-              msg.channel.send('Pst halloween ended.');
+            let today = new Date();
+            let done = '';
+
+            for (let i in types) {
+              if ( 'currency' in types[i] && types[i].currency == type && types[i].month == today.getMonth()) {
+                helper.grantCandies(mID, add, con);
+                msg.channel.send(`${user} has been rewarded ${add} ${types[i].currency}.`);
+                return 0;
+              }
             }
-            else if (type == 'marbles') {
+
+            if (done == '' && type == 'marbles') {
               helper.grantMarbles(mID, add, con);
               msg.channel.send(user + ' has been rewarded ' + add + ' marbles.');
             }
@@ -196,8 +201,11 @@ module.exports = {
                 let ayear = claim[0].active.getFullYear();
 
                 let res = 0;
+                let pastYear = dyear > ayear;
+                let pastMonth = dyear == ayear && dmonth > amonth;
+                let pastDay = dyear == ayear && dmonth == amonth && ddate >= adate;
 
-                if (dyear >= ayear && dmonth >= amonth && ddate >= adate) {
+                if (pastYear || pastMonth || pastDay) {
                   if (!isNaN(claim[0].inactive)) {
                     res = 1;
                   }

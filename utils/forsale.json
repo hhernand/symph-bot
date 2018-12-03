@@ -1,0 +1,30 @@
+{
+  "c": {
+    "title": "Common - 10",
+    "items": ""
+    },
+  "uc": {
+    "title": "Uncommon - 30",
+    "items": ""
+    },
+  "r": {
+    "title": "Rare - 50",
+    "items": ""
+    },
+  "m": {
+    "title": "Radioactive - 150",
+    "items": ""
+    },
+  "salts": {
+    "title": "Salts",
+    "items": ""
+    },
+  "soaps": {
+    "title": "Soaps",
+    "items": ""
+    },
+  "other": {
+    "title": "Other",
+    "items": ""
+    }
+}

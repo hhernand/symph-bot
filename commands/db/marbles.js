@@ -1,6 +1,7 @@
 const async = require('async');
 const access = require('../../utils/access.js');
 const helper = require('../../utils/helper.js');
+const types = require('../../utils/types.json');
 
 module.exports = {
   giveCurrency: function(msg, con) {
@@ -30,14 +31,14 @@ module.exports = {
                   msg.channel.send('You gave ' + amount + ' marbles to ' + receiver + '!');
                 }
               }
-              else if (type == 'candies') {
+              else if (type == 'snowflakes') {
                 if (g[0].candies < amount) {
-                  msg.channel.send('You don\'t have enough candies to give!');
+                  msg.channel.send('You don\'t have enough snowflakes to give!');
                 }
                 else {
                   helper.grantCandies(giverID, (amount*-1), con);
                   helper.grantCandies(r[0].memberID, amount, con);
-                  msg.channel.send('You gave ' + amount + ' candies to ' + receiver + '!');
+                  msg.channel.send('You gave ' + amount + ' snowflakes to ' + receiver + '!');
                 }
               }
               else {
@@ -57,35 +58,40 @@ module.exports = {
       let item = helper.extractItem(msg.content);
 
       access.itemByName(item, con, function(items) {
-        if (items.length == 0) msg.channel.send('That item is not in the shop!');
+        if (items.length == 0 || items[0].cost == 0) msg.channel.send('That item is not in the shop!');
         else {
-          let price = items[0].cost;
-          if (price != 0) {
+          let today = new Date();
+
+          if (items[0].type != 'general' && today.getMonth() != types[items[0].type].month) {
+            let type = items[0].type[0].toUpperCase() + items[0].type.substr(1);
+            msg.channel.send(`Sorry! ${type} items cannot be bought at this time!`);
+          }
+          else {
+            let price = items[0].cost;
             access.memberByID(buyerID, con, function(buyer) {
               let num = 0;
               let curr = '';
 
-              if (items[0].type == 'halloween') {
-                /*num = 0;
-                curr = 'candies!';*/
-                res = 'Halloween items are not for sale anymore!';
+              if (items[0].type != 'general') {
+                num = buyer[0].candies;
+                curr = types[items[0].type].currency;
               }
               else {
                 num = buyer[0].marbles;
-                curr = 'marbles!'
+                curr = 'marbles'
               }
 
               if ((price*want) <= num) {
-                if (curr == 'marbles!') helper.grantMarbles(buyerID, (price*want*-1), con);
-                // else helper.grantCandies(buyerID, (price*want*-1), con);
+                if (curr == 'marbles') helper.grantMarbles(buyerID, (price*want*-1), con);
+                else helper.grantCandies(buyerID, (price*want*-1), con);
 
                 helper.grantItem(buyerID, items[0].itemID, want, con);
 
-                res = "You bought " + want + " " + item + " for " + (price*want) + " " + curr + " Be sure to use !myinfo to check if you got your items."
+                res = "You bought " + want + " " + item + " for " + (price*want) + " " + curr + "! Be sure to use !myinfo to check if you got your items."
               }
               else {
                 // not enough marbles
-                if (res == '') res = "Nice try, but you don't have enough " + curr;
+                if (res == '') res = "Nice try, but you don't have enough " + curr + "!";
               }
               msg.channel.send(res);
             });
@@ -104,7 +110,7 @@ module.exports = {
           let current = member[0].marbles;
           let item = helper.extractItem(msg.content);
           access.itemByName(item, con, function(res) {
-            if (res.length == 1) {
+            if (res.length == 1 && res[0].type == 'general') {
               let iID = res[0].itemID;
               let gain = Math.ceil(res[0].cost / 3);
               access.ownsSpecific(memID, iID, con, function(res2) {
@@ -115,7 +121,13 @@ module.exports = {
                   let end = 'You sold ' + num + ' ' + item + ' for ' + gain + ' marbles!';
                   msg.channel.send(end);
                 }
+                else {
+                  msg.channel.send('You do not have that item!');
+                }
               });
+            }
+            else {
+              msg.channel.send('You cannot sell that item!');
             }
           });
         }
@@ -125,91 +137,14 @@ module.exports = {
 
   shopList: function(msg, ds, con) {
     if (msg.content.split(' ').length == 2) {
-      if (msg.content.split(' ')[1].toLowerCase() == 'halloween') {
-        let d = new Date();
-        let dmonth = d.getMonth();
-        if (dmonth == 9) {
-          let c = '';
-          let uc = '';
-          let r = '';
-          access.shop('halloween', con, function(items) {
-            for (let i = 0; i < items.length; i++) {
-              if (items[i].cost == 10) c += items[i].name + '\n';
-              else if (items[i].cost == 30) uc += items[i].name + '\n';
-              else r += items[i].name + '\n';
-            }
-            const embedHal = new ds.RichEmbed()
-              .setTitle('The Bath House - Halloween Special!')
-              .setDescription('Items can only be purchased with candy.')
-              .setFooter('To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.')
-              .setColor('ORANGE')
-              .addField('Common - 10', c)
-              .addField('Uncommon - 30', uc)
-              .addField('Rare - 50', r)
-
-            msg.channel.send(embedHal);
-          })
-        }
-        else {
-          msg.channel.send('The Halloween section is closed!');
-        }
-      }
-      else {
-        msg.channel.send('Sorry! That section of the shop doesn\'t exist.');
-      }
+      helper.makeShop(msg.content.split(' ')[1].toLowerCase(), ds, con, function(shop) {
+        msg.channel.send(shop);
+      });
     }
     else {
-      var common = '';
-      var uncommon = '';
-      var rare = '';
-      var mutation = '';
-      var salts = '';
-      var soaps = '';
-      var trash = '';
-      let iName = '';
-      let iPrice = 0;
-      access.shop('general' , con, function(items) {
-        for (let i = 0; i < items.length; i++) {
-          iName = items[i].name;
-          iPrice = items[i].cost;
-          if (iName.includes("Bath Bomb")) {
-            if (iPrice == 10) {
-              common += iName + '\n';
-            }
-            else if (iPrice == 30) {
-              uncommon += iName + '\n';
-            }
-            else if (iPrice == 150) {
-              mutation += iName + '\n';
-            }
-            else {
-              rare += iName + '\n';
-            }
-          }
-          else if (iName.includes("Salts")) {
-            salts += iName + ' - ' + iPrice + '\n';
-          }
-          else if (iName.includes("Soap")) {
-            soaps += iName + ' - ' + iPrice + '\n';
-          }
-          else {
-            trash += iName + ' - ' + iPrice + '\n';
-          }
-        }
-        const embed = new ds.RichEmbed()
-          .setTitle('The Bath House')
-          .setFooter('To purchase an item, type !buy 1 item. Items can also be sold back to Izzie for 1/3 its original price using !sell 1 item. You can set the quantity.')
-          .setColor('AQUA')
-          .addField('Common - 10', common, true)
-          .addField('Uncommon - 30', uncommon, true)
-          .addField('Rare - 50', rare, true)
-          .addField('Radioactive - 150', mutation, true)
-          .addField('Salts', salts, true)
-          .addField('Soaps', soaps, true)
-          .addField('MYOs', trash, true)
-
-        msg.channel.send(embed);
-      })
+      helper.makeShop('general', ds, con, function(shop) {
+        msg.channel.send(shop);
+      });
     }
   }
 }

@@ -53,5 +53,63 @@ module.exports = {
       sql = 'UPDATE member SET candies = ' + total + ' WHERE memberID = "' + id + '"';
       con.query(sql);
     });
+  },
+
+  makeShop: function(type, ds, con, callback) {
+    const shop = new ds.RichEmbed();
+    let forsale = require('./forsale.json');
+    let types = require('./types.json');
+
+    let today = new Date();
+    if (!Object.keys(types).includes(type)) {
+      callback(`Sorry! The ${type} shop doesn't exist!`);
+    } else if (type != 'general' && today.getMonth() != types[type].month) {
+      callback(`Sorry! The ${type} shop is currently closed!`);
+    } else {
+      shop.setTitle(types[type].name);
+      if (types[type].description != '') {
+        shop.setDescription(types[type].description);
+      }
+      shop.setFooter(types[type].footer);
+      shop.setColor(types[type].colour);
+
+      access.shop(type, con, function(items) {
+        for (let i = 0; i < items.length; i++) {
+          let item = items[i];
+
+          if (item.name.includes('Bath Bomb')) {
+            if (item.cost == 10) {
+              forsale.c.items += `${item.name}\n`;
+            }
+            else if (item.cost == 30) {
+              forsale.uc.items += `${item.name}\n`;
+            }
+            else if (item.cost == 150) {
+              forsale.m.items += `${item.name}\n`;
+            }
+            else {
+              forsale.r.items += `${item.name}\n`;
+            }
+          }
+          else if (item.name.includes('Salts')) {
+            forsale.salts.items += `${item.name} - ${item.cost}\n`;
+          }
+          else if (item.name.includes('Soap')) {
+            forsale.soaps.items += `${item.name} - ${item.cost}\n`
+          }
+          else {
+            forsale.other.items += `${item.name} - ${item.cost}\n`;
+          }
+        }
+
+        for (let key in forsale) {
+          if (forsale[key].items != '') {
+            shop.addField(forsale[key].title, forsale[key].items, true);
+          }
+        }
+
+        callback(shop);
+      })
+    }
   }
 }
