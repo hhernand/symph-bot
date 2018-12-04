@@ -81,6 +81,8 @@ module.exports = {
                 curr = 'marbles'
               }
 
+              let res = '';
+
               if ((price*want) <= num) {
                 if (curr == 'marbles') helper.grantMarbles(buyerID, (price*want*-1), con);
                 else helper.grantCandies(buyerID, (price*want*-1), con);

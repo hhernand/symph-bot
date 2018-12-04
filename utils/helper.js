@@ -57,8 +57,37 @@ module.exports = {
 
   makeShop: function(type, ds, con, callback) {
     const shop = new ds.RichEmbed();
-    let forsale = require('./forsale.json');
     let types = require('./types.json');
+    let forsale = {
+      c: {
+        title: 'Common - 10',
+        items: ''
+      },
+      uc: {
+        title: 'Uncommon - 30',
+        items: ''
+      },
+      r: {
+        title: 'Rare - 50',
+        items: ''
+      },
+      m: {
+        title: 'Radioactive - 150',
+        items: ''
+      },
+      salts: {
+        title: 'Salts',
+        items: ''
+      },
+      soaps: {
+        title: 'Soaps',
+        items: ''
+      },
+      other: {
+        title: 'Other',
+        items: ''
+      }
+    };
 
     let today = new Date();
     if (!Object.keys(types).includes(type)) {
@@ -107,7 +136,7 @@ module.exports = {
             shop.addField(forsale[key].title, forsale[key].items, true);
           }
         }
-
+        forsale = {};
         callback(shop);
       })
     }
