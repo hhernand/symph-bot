@@ -90,7 +90,7 @@ module.exports = {
       if (member.length == 1) {
         let id = member[0].memberID;
         let num = member[0].marbles;
-        //let c = member[0].candies;
+        let c = member[0].candies;
 
         access.owns(id, con, function(owned) {
           if (owned.length == 0) {
