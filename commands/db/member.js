@@ -214,7 +214,7 @@ module.exports = {
                     let imonth = claim[0].inactive.getMonth();
                     let iyear = claim[0].inactive.getFullYear();
 
-                    if (dyear <= iyear && dmonth <= imonth && ddate < idate) {
+                    if (dyear <= iyear && dmonth <= imonth && ddate <= idate) {
                       res = 1;
                     }
                     else res = 2;

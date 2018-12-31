@@ -90,9 +90,17 @@ module.exports = {
     };
 
     let today = new Date();
+
+    let monthAfter = types[type].month + 1;
+    if ( monthAfter == 12 ) {
+      monthAfter = 0;
+    }
+
+    let stillOpen = today.getMonth() == monthAfter && today.getDate() <= 5;
+
     if (!Object.keys(types).includes(type)) {
       callback(`Sorry! The ${type} shop doesn't exist!`);
-    } else if (type != 'general' && today.getMonth() != types[type].month) {
+    } else if (type != 'general' && today.getMonth() != types[type].month && stillOpen == false ) {
       callback(`Sorry! The ${type} shop is currently closed!`);
     } else {
       shop.setTitle(types[type].name);

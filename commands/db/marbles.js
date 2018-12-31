@@ -62,7 +62,14 @@ module.exports = {
         else {
           let today = new Date();
 
-          if (items[0].type != 'general' && today.getMonth() != types[items[0].type].month) {
+          let monthAfter = types[items[0].type].month + 1;
+          if ( monthAfter == 12 ) {
+            monthAfter = 0;
+          }
+
+          let stillOpen = today.getMonth() == monthAfter && today.getDate() <= 5;
+
+          if (items[0].type != 'general' && today.getMonth() != types[items[0].type].month && stillOpen == false) {
             let type = items[0].type[0].toUpperCase() + items[0].type.substr(1);
             msg.channel.send(`Sorry! ${type} items cannot be bought at this time!`);
           }
