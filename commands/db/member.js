@@ -45,14 +45,13 @@ module.exports = {
           .setThumbnail(msg.author.avatarURL)
           .addField('DA Username', user, true)
           .addField('Marbles', num, true)
-          .addField('Snowflakes', c, true)
 
-        /* let date = new Date();
+        let date = new Date();
         for (let type in types) {
           if ( 'month' in types[type] && types[type].month == date.getMonth()) {
             embed.addField(types[type].currency[0].toUpperCase()+types[type].currency.substr(1), c, true);
           }
-        } */
+        }
 
         access.owns(id, con, function(owned) {
           if (owned.length != 0) {
@@ -100,7 +99,6 @@ module.exports = {
               .setColor('BLUE')
               .addField('DA Username', user, true)
               .addField('Marbles', num, true)
-              .addField('Snowflakes', c, true);
 
             msg.channel.send(embed);
           }
@@ -124,7 +122,6 @@ module.exports = {
                 .setColor('BLUE')
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
-                .addField('Snowflakes', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -163,7 +160,7 @@ module.exports = {
             let done = '';
 
             for (let i in types) {
-              if ( 'currency' in types[i] && types[i].currency == type ) {
+              if ( 'currency' in types[i] && types[i].currency == type && types[i].month == today.getMonth() ) {
                 helper.grantCandies(mID, add, con);
                 msg.channel.send(`${user} has been rewarded ${add} ${types[i].currency}.`);
                 return 0;
