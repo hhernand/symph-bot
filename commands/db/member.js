@@ -204,7 +204,7 @@ module.exports = {
                 let pastDay = dyear == ayear && dmonth == amonth && ddate >= adate;
 
                 if (pastYear || pastMonth || pastDay) {
-                  if (!isNaN(claim[0].inactive)) {
+                  if ( ! claim[0].inactive ) {
                     res = 1;
                   }
                   else {
