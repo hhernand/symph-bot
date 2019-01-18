@@ -204,7 +204,7 @@ module.exports = {
                 let pastDay = dyear == ayear && dmonth == amonth && ddate >= adate;
 
                 if (pastYear || pastMonth || pastDay) {
-                  if ( ! claim[0].inactive ) {
+                  if ( claim[0].hasInactive == 'no' ) {
                     res = 1;
                   }
                   else {
