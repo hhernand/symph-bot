@@ -1,11 +1,9 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const mysql = require('mysql');
-const env = require('node-env-file');
 
 const db = require('require-dir-all')('./commands/db');
 const other = require('require-dir-all')('./commands/other');
-env('.env');
 
 var con;
 if (process.env.JAWSDB_URL) {
