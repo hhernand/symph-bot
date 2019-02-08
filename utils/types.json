@@ -20,5 +20,13 @@
     "footer": "To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.",
     "month": 11,
     "currency": "snowflakes"
+  },
+  "valentines": {
+    "name": "The Bath House - Valentine Special!",
+    "description": "Items can only be purchased with sweethearts.",
+    "colour": 16044277,
+    "footer": "To purchase an item, type !buy 1 item. You can set the quantity. Items bought here will not be refunded.",
+    "month": 1,
+    "currency": "sweethearts"
   }
 }

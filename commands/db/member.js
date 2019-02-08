@@ -99,7 +99,6 @@ module.exports = {
               .setColor('BLUE')
               .addField('DA Username', user, true)
               .addField('Marbles', num, true)
-              .addField('Snowflakes', c, true);
 
             msg.channel.send(embed);
           }
@@ -123,7 +122,6 @@ module.exports = {
                 .setColor('BLUE')
                 .addField('DA Username', user, true)
                 .addField('Marbles', num, true)
-                .addField('Snowflakes', c, true)
                 .addField('Items', res);
 
               msg.channel.send(embed);
@@ -162,7 +160,7 @@ module.exports = {
             let done = '';
 
             for (let i in types) {
-              if ( 'currency' in types[i] && types[i].currency == type && types[i].month == today.getMonth()) {
+              if ( 'currency' in types[i] && types[i].currency == type && types[i].month == today.getMonth() ) {
                 helper.grantCandies(mID, add, con);
                 msg.channel.send(`${user} has been rewarded ${add} ${types[i].currency}.`);
                 return 0;
@@ -204,20 +202,25 @@ module.exports = {
                 let pastYear = dyear > ayear;
                 let pastMonth = dyear == ayear && dmonth > amonth;
                 let pastDay = dyear == ayear && dmonth == amonth && ddate >= adate;
+                
+                let idate = 0;
+                let imonth = 0;
+                let iyear = 0;
 
                 if (pastYear || pastMonth || pastDay) {
-                  if (!isNaN(claim[0].inactive)) {
-                    res = 1;
-                  }
-                  else {
-                    let idate = claim[0].inactive.getDate();
-                    let imonth = claim[0].inactive.getMonth();
-                    let iyear = claim[0].inactive.getFullYear();
+                  res = 1;
+                  if ( claim[0].hasInactive == 'yes' ) {
+                    idate = claim[0].inactive.getDate();
+                    imonth = claim[0].inactive.getMonth();
+                    iyear = claim[0].inactive.getFullYear();
+                    
+                    let pastEndYear = dyear > iyear;
+                    let pastEndMonth = dyear == iyear && dmonth > imonth;
+                    let pastEndDay = dyear == iyear && dmonth == imonth && ddate >= idate;
 
-                    if (dyear <= iyear && dmonth <= imonth && ddate <= idate) {
-                      res = 1;
+                    if (pastEndYear || pastEndMonth || pastEndDay) {
+                      res = 2;
                     }
-                    else res = 2;
                   }
                 }
 
