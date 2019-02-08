@@ -76,7 +76,7 @@ bot.on('message', (message) => {
 
   // shop
 
-  if (message.channel.id == '446075264791740432' || message.channel.id == '493447292502933504') {
+  if (message.channel.id == '446075264791740432' || message.channel.id == '493447292502933504' || message.channel.id == '446126482327076875') {
     if (msg.startsWith('!shop')) {
       db.marbles.shopList(message, Discord, con);
     }
