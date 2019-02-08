@@ -12,6 +12,7 @@
     "async": "^2.6.1",
     "discord.js": "^11.3.2",
     "mysql": "^2.15.0",
+    "node-env-file": "^0.1.8",
     "request": "^2.81.0",
     "require-dir-all": "^0.4.15"
   }
