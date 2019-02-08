@@ -99,9 +99,9 @@ module.exports = {
 				access.owns(id, con, function (owned) {
 					if (owned.length != 0) {
 						var res = '';
-						var q = '';
 
 						for ( let item of owned ) {
+							var q = '';
 							if ( item.quantity > 1 ) q = ` x ${item.quantity}`;
 							res += `${item.name}${q}\n`;
 						}
