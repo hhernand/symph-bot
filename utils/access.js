@@ -40,7 +40,7 @@ module.exports = {
 	},
 
 	owns: function (id, con, callback) {
-		let sql = 'SELECT i.name, o.quantity FROM owns o JOIN item i ON o.itemID = i.itemID WHERE o.memberID = "' + id + '" ORDER BY i.name';
+		let sql = 'SELECT i.name, o.quantity FROM owns o JOIN item i ON o.itemID = i.itemID WHERE o.memberID = "' + id + '" AND o.quantity > 0 ORDER BY i.name';
 		con.query(sql, (err, owns) => {
 			if (err) throw err;
 			else callback(owns);
