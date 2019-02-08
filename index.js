@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const mysql = require('mysql');
-const local = require('./utils/local.json');
 const env = require('node-env-file');
 
 const db = require('require-dir-all')('./commands/db');
@@ -11,8 +10,6 @@ env('.env');
 var con;
 if (process.env.JAWSDB_URL) {
 	con = mysql.createConnection(process.env.JAWSDB_URL);
-} else {
-	con = mysql.createConnection(local);
 };
 
 bot.on('message', (message) => {

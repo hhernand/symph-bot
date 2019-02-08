@@ -58,23 +58,14 @@ module.exports = {
 						var res = '';
 						var q = '';
 
-						async.eachSeries(owned, function (el, callback) {
+						for ( let item of owned ) {
+							if ( item.quantity > 1 ) q = ` x ${item.quantity}`;
+							res += `${item.name}${q}\n`;
+						}
 
-							access.itemByID(el.itemID, con, function (entry) {
-								if (el.quantity > 1) q = ' x ' + String(el.quantity);
-								res += entry[0].name + q + '\n';
-								callback();
-							});
-
-							q = '';
-						},
-							function (err, owned) {
-								embed.addField('Items', res);
-								msg.channel.send(embed);
-							});
-					} else {
-						msg.channel.send(embed);
+						embed.addField('Items', res);
 					}
+					msg.channel.send(embed);
 				});
 			}
 			else {
@@ -92,41 +83,33 @@ module.exports = {
 				let num = member[0].marbles;
 				let c = member[0].candies;
 
-				access.owns(id, con, function (owned) {
-					if (owned.length == 0) {
-						const embed = new ds.RichEmbed()
-							.setTitle('Member Information')
-							.setColor('BLUE')
-							.addField('DA Username', user, true)
-							.addField('Marbles', num, true)
+				const embed = new ds.RichEmbed()
+					.setTitle('Member Information')
+					.setColor('BLUE')
+					.addField('DA Username', user, true)
+					.addField('Marbles', num, true)
 
-						msg.channel.send(embed);
+				let date = new Date();
+				for (let type in types) {
+					if ('month' in types[type] && types[type].month == date.getMonth()) {
+						embed.addField(types[type].currency[0].toUpperCase() + types[type].currency.substr(1), c, true);
 					}
-					else {
+				}
+				
+				access.owns(id, con, function (owned) {
+					if (owned.length != 0) {
 						var res = '';
 						var q = '';
 
-						async.eachSeries(owned, function (el, callback) {
+						for ( let item of owned ) {
+							if ( item.quantity > 1 ) q = ` x ${item.quantity}`;
+							res += `${item.name}${q}\n`;
+						}
 
-							access.itemByID(el.itemID, con, function (entry) {
-								if (el.quantity > 1) q = ' x ' + String(el.quantity);
-								res += entry[0].name + q + '\n';
-								callback();
-							});
-
-							q = '';
-						},
-							function (err, owned) {
-								const embed = new ds.RichEmbed()
-									.setTitle('Member Information')
-									.setColor('BLUE')
-									.addField('DA Username', user, true)
-									.addField('Marbles', num, true)
-									.addField('Items', res);
-
-								msg.channel.send(embed);
-							});
+						embed.addField('Items', res);
 					}
+
+					msg.channel.send(embed);
 				});
 			}
 			else {
