@@ -1,4 +1,3 @@
-const async = require('async');
 const access = require('../../utils/access.js');
 const helper = require('../../utils/helper.js');
 const marble = require('./marbles.js');
@@ -247,7 +246,7 @@ module.exports = {
 				con.query(sql);
 				con.query(sql2);
 			}
-			msg.channel.send('All candies have been converted into marbles');
+			msg.channel.send('All event currency has been converted into marbles');
 		})
 	}
 };

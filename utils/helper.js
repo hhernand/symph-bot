@@ -55,32 +55,32 @@ module.exports = {
 		});
 	},
 
+	updateStock: function (id, num, con) {
+		access.itemByID( id, con, function (item) {
+			let total = item[0].stock + num;
+			let sql = `UPDATE item SET stock = ${total} WHERE itemID = ${id}`;
+			con.query(sql);
+		})
+	},
+
 	makeShop: function (type, ds, con, callback) {
 		const shop = new ds.RichEmbed();
 		let types = require('./types.json');
 		let forsale = {
-			c: {
+			10: {
 				title: 'Common - 10',
 				items: ''
 			},
-			uc: {
+			30: {
 				title: 'Uncommon - 30',
 				items: ''
 			},
-			r: {
+			50: {
 				title: 'Rare - 50',
 				items: ''
 			},
-			m: {
+			150: {
 				title: 'Radioactive - 150',
-				items: ''
-			},
-			salts: {
-				title: 'Salts',
-				items: ''
-			},
-			soaps: {
-				title: 'Soaps',
 				items: ''
 			},
 			other: {
@@ -113,29 +113,22 @@ module.exports = {
 			access.shop(type, con, function (items) {
 				for (let i = 0; i < items.length; i++) {
 					let item = items[i];
+					let text = item.name;
 
-					if (item.name.includes('Bath Bomb')) {
-						if (item.cost == 10) {
-							forsale.c.items += `${item.name}\n`;
-						}
-						else if (item.cost == 30) {
-							forsale.uc.items += `${item.name}\n`;
-						}
-						else if (item.cost == 150) {
-							forsale.m.items += `${item.name}\n`;
-						}
-						else {
-							forsale.r.items += `${item.name}\n`;
-						}
+					if ( ! ( item.cost in forsale ) || item.name.includes( 'Soap' ) ) {
+						text += ` - ${item.cost}`;
 					}
-					else if (item.name.includes('Salts')) {
-						forsale.salts.items += `${item.name} - ${item.cost}\n`;
+
+					if ( item.stock > -1 ) {
+						text += ` - ${item.stock} in stock`;
 					}
-					else if (item.name.includes('Soap')) {
-						forsale.soaps.items += `${item.name} - ${item.cost}\n`
-					}
-					else {
-						forsale.other.items += `${item.name} - ${item.cost}\n`;
+
+					text += '\n';
+
+					if ( item.cost in forsale && ! item.name.includes( 'Soap' ) ) {
+						forsale[item.cost].items += text;
+					} else {
+						forsale.other.items += text; 
 					}
 				}
 
@@ -148,5 +141,46 @@ module.exports = {
 				callback(shop);
 			})
 		}
+	},
+
+	makePetShop: function ( ds, con, callback ) {
+		let types = require('./types.json');
+		const shop = new ds.RichEmbed()
+			.setTitle('Roach\'s Pet Shop')
+			.setDescription('Oy kiddie! Y\'wanna take care of one of a lil\' one I\'m got here? Sure! These lil\' chunksters are definitely lookin\' for sum lovin\' home, all we ask is for a teensy fee to pay fer them!')
+			.setThumbnail('https://i.imgur.com/u5aK1p6.png')
+			.setColor('#a2e8f0');
+		access.shop( '', con, function (items) {
+			if ( items.length != 0 ) {
+				let event = '';
+				let regular = '';
+				for ( let item of items ) {
+					if ( item.type != 'general' && item.type in types ) {
+						let today = new Date();
+						if ( today.getMonth() == types[item.type].month ) {
+							console.log( item.name );
+							event += `${item.name} - ${item.cost} ${types[item.type].currency}`;
+							if ( item.stock != -1 ) {
+								event += ` - ${item.stock} in stock`;
+							}
+							event += '\n';
+						}
+					} else {
+						regular += `${item.name} - ${item.cost} marbles`;
+						if ( item.stock != -1 ) {
+							regular += ` - ${item.stock} in stock`;
+						}
+						regular += '\n';
+					}
+				}
+
+				shop.addField( 'Regular Pets', regular );
+				if ( event != '' ) {
+					shop.addField( 'Event Pets', event );
+				}
+
+				callback( shop );
+			}
+		}, 'pet');
 	}
 }

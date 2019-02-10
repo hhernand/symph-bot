@@ -74,5 +74,51 @@ module.exports = {
 				})
 			});
 		});
+	},
+
+	petShop: function ( msg, ds, con ) {
+		helper.makePetShop( ds, con, function (shop) {
+			msg.channel.send(shop);
+		});
+	},
+
+	stock: function ( msg, ds, con ) {
+		let embed = new ds.RichEmbed()
+			.setTitle('Stock')
+			.setDescription('List of all items that can be restocked with !restock # item.');
+		access.stock( con, function( items ) {
+			let res = '';
+			for ( let item of items ) {
+				res += `${item.name} - ${item.stock} in stock`;
+			}
+
+			embed.addField('Items', res);
+			msg.channel.send( embed );
+		})
+	},
+
+	restock: function ( msg, con ) {
+		let add = Number(msg.content.split(" ")[1]);
+		let name = helper.extractItem( msg.content );
+
+		if ( isNaN(add) ) {
+			msg.channel.send( `${add} is not a number` );
+			return;
+		}
+		
+		access.itemByName( name, con, function(item) {
+			if ( item.length != 1 ) {
+				msg.channel.send( `${name} doesn't exist!` );
+				return;
+			}
+			if ( item[0].stock != -1 ) {
+				helper.updateStock( item[0].itemID, add, con );
+				msg.channel.send( `${add} added to ${item[0].name}!` );
+			} else if ( item[0].stock + add < 0 ) {
+				msg.channel.send( 'You\'re taking away more than what\'s there!' );
+			} else {
+				msg.channel.send( `You can't add to an infinite stock!` );
+			}
+		});
 	}
 }

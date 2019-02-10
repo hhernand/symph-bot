@@ -55,8 +55,21 @@ module.exports = {
 		});
 	},
 
-	shop: function (type, con, callback) {
-		let sql = 'SELECT * FROM item WHERE type = "' + type + '" AND cost > 0';
+	shop: function (type, con, callback, category = 'cosmetic') {
+		let sql = '';
+		if ( type != '' ) {
+			sql = `SELECT * FROM item WHERE type = "${type}" AND cost > 0 AND category = "${category}" ORDER BY cost`;
+		} else {
+			sql = `SELECT * FROM item WHERE cost > 0 AND category = "${category}" ORDER BY cost`;
+		}
+		con.query(sql, (err, items) => {
+			if (err) throw err;
+			else callback(items);
+		})
+	},
+
+	stock: function (con, callback) {
+		let sql = `SELECT * FROM item WHERE stock > -1`;
 		con.query(sql, (err, items) => {
 			if (err) throw err;
 			else callback(items);

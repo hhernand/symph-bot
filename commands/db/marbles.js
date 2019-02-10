@@ -1,4 +1,3 @@
-const async = require('async');
 const access = require('../../utils/access.js');
 const helper = require('../../utils/helper.js');
 const types = require('../../utils/types.json');
@@ -90,17 +89,26 @@ module.exports = {
 
 							let res = '';
 
-							if ((price * want) <= num) {
+							if ((price * want) <= num && ( items[0].stock == -1 || items[0].stock >= want ) ) {
 								if (curr == 'marbles') helper.grantMarbles(buyerID, (price * want * -1), con);
 								else helper.grantCandies(buyerID, (price * want * -1), con);
 
 								helper.grantItem(buyerID, items[0].itemID, want, con);
 
-								res = "You bought " + want + " " + item + " for " + (price * want) + " " + curr + "! Be sure to use !myinfo to check if you got your items."
+								if ( items[0].stock != -1 ) {
+									helper.updateStock(items[0].itemID, -(want), con);
+								}
+
+								res = `You bought ${want} ${item} for ${(price * want)} ${curr}! Be sure to use !myinfo to check if you got your items.`;
 							}
-							else {
+							else if ( items[0].stock == 0 ) {
+								// item out of stock
+								res = `Sorry, ${items[0].name} is out of stock!`;
+							} else if ( items[0].stock < want ) {
+								res = `There's not enough ${items[0].name} for you to buy!`;
+							} else {
 								// not enough marbles
-								if (res == '') res = "Nice try, but you don't have enough " + curr + "!";
+								if (res == '') res = `Nice try, but you don't have enough ${curr}!`;
 							}
 							msg.channel.send(res);
 						});
@@ -119,7 +127,7 @@ module.exports = {
 					let current = member[0].marbles;
 					let item = helper.extractItem(msg.content);
 					access.itemByName(item, con, function (res) {
-						if (res.length == 1 && res[0].type == 'general') {
+						if (res.length == 1) {
 							let iID = res[0].itemID;
 							let gain = Math.ceil(res[0].cost / 3);
 							access.ownsSpecific(memID, iID, con, function (res2) {
@@ -136,7 +144,7 @@ module.exports = {
 							});
 						}
 						else {
-							msg.channel.send('You cannot sell that item!');
+							msg.channel.send(`${item} doesn't exist!`);
 						}
 					});
 				}

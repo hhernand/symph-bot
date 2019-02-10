@@ -9,8 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "async": "^2.6.1",
     "discord.js": "^11.3.2",
+    "eslint": "^5.13.0",
     "mysql": "^2.15.0",
     "node-env-file": "^0.1.8",
     "request": "^2.81.0",

@@ -81,6 +81,10 @@ bot.on('message', (message) => {
 			db.marbles.shopList(message, Discord, con);
 		}
 
+		if (msg == '!petshop') {
+			db.items.petShop( message, Discord, con);
+		}
+
 		if (msg.startsWith('!buy ')) {
 			db.marbles.buy(message, con);
 		}
@@ -95,6 +99,14 @@ bot.on('message', (message) => {
 	if (message.channel.id == '484719843111731205') {
 		if (msg.startsWith('!reward')) {
 			db.member.reward(message, con);
+		}
+		
+		if (msg == '!stock') {
+			db.items.stock(message, Discord, con);
+		}
+
+		if (msg.startsWith('!restock ')) {
+			db.items.restock(message, con);
 		}
 
 		if (msg.startsWith('!check ')) {
