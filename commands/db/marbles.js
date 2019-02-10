@@ -30,14 +30,14 @@ module.exports = {
 									msg.channel.send('You gave ' + amount + ' marbles to ' + receiver + '!');
 								}
 							}
-							else if (type == 'snowflakes') {
+							else if (type == 'sweethearts') {
 								if (g[0].candies < amount) {
-									msg.channel.send('You don\'t have enough snowflakes to give!');
+									msg.channel.send('You don\'t have enough sweethearts to give!');
 								}
 								else {
 									helper.grantCandies(giverID, (amount * -1), con);
 									helper.grantCandies(r[0].memberID, amount, con);
-									msg.channel.send('You gave ' + amount + ' snowflakes to ' + receiver + '!');
+									msg.channel.send('You gave ' + amount + ' sweethearts to ' + receiver + '!');
 								}
 							}
 							else {
