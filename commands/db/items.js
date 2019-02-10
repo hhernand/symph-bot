@@ -89,7 +89,7 @@ module.exports = {
 		access.stock( con, function( items ) {
 			let res = '';
 			for ( let item of items ) {
-				res += `${item.name} - ${item.stock} in stock`;
+				res += `${item.name} - ${item.stock} in stock\n`;
 			}
 
 			embed.addField('Items', res);
