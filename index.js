@@ -120,6 +120,10 @@ bot.on('message', (message) => {
 		if (msg == '!convert') {
 			db.member.convert(message, con);
 		}
+
+		if (msg.startsWith('!pathroll ')) {
+			db.items.explore(message, Discord, con);
+		}
 	}
 });
 

@@ -120,5 +120,46 @@ module.exports = {
 				msg.channel.send( `You can't add to an infinite stock!` );
 			}
 		});
+	},
+
+	explore: function( msg, ds, con ) {
+		let path = msg.content.split( ' ' )[1];
+		access.path(path, con, (res) => {
+			if ( res.length == 1 ) {
+				let response = `${msg.author} **Rolling for ${res[0].name}...**\n\n**Result:**`;
+				let num = Math.ceil(Math.random() * 15);
+
+				if ( num < 3 ) {
+					msg.channel.send( `${response} Nothing` );
+				} else if ( num == 3 ) {
+					let collectible = new ds.Attachment( res[0].collectible );
+					msg.channel.send( `${response} Collectible`, collectible );
+				} else if ( num > 3 && num < 8 ) {
+					let amount = Math.ceil(Math.random() * 3);
+					access.ingredientsByPath( res[0].pathID, con, (items) => {
+						let i = Math.ceil(Math.random() * items.length);
+						let item = items[i].name;
+						msg.channel.send( `${response} ${amount} ${item}` );
+					})
+				} else if ( num > 7 && num < 10 ) {
+					access.petsByPath( res[0].pathID, con, (pets) => {
+						let i = Math.ceil(Math.random() * pets.length);
+						let pet = pets[i].name;
+						msg.channel.send( `${response} ${pet}` );
+					})
+				} else if ( num == 10 ) {
+					let icon = new ds.Attachment( res[0].icon );
+					msg.channel.send( `${response} Icon`, icon );
+				} else if ( num > 10 && num < 14 ) {
+					let amount = Math.ceil(Math.random() * 30);
+					msg.channel.send( `${response} ${amount} event currency` );
+				} else {
+					let amount = Math.ceil(Math.random() * 30);
+					msg.channel.send( `${response} ${amount} marbles` );
+				}
+			} else {
+				msg.channel.send( `${path} doesn't exist! Roll again` );
+			}
+		});
 	}
 }

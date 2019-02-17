@@ -114,5 +114,37 @@ module.exports = {
 			if (err) throw err;
 			else callback(claimed);
 		});
+	},
+
+	path: function(short, con, callback) {
+		let sql = `SELECT * FROM exploration WHERE short = "${short}"`;
+		con.query(sql, (err, path) => {
+			if (err) throw err;
+			else callback(path);
+		})
+	},
+
+	ingredientsByPath: function(pathID, con, callback) {
+		let select = 'SELECT i.name FROM loot l';
+		let join = 'JOIN item i ON l.itemID = i.itemID';
+		let where = `WHERE i.category = "crafting" AND l.pathID = ${pathID}`;
+		let sql = `${select} ${join} ${where}`;
+		
+		con.query( sql, (err, items) => {
+			if (err) throw err;
+			else callback(items);
+		})
+	},
+
+	petsByPath: function(pathID, con, callback) {
+		let select = 'SELECT i.name FROM loot l';
+		let join = 'JOIN item i ON l.itemID = i.itemID';
+		let where = `WHERE i.category = "pet" AND l.pathID = ${pathID}`;
+		let sql = `${select} ${join} ${where}`;
+		
+		con.query( sql, (err, pets) => {
+			if (err) throw err;
+			else callback(pets);
+		})
 	}
 }
