@@ -60,7 +60,7 @@ module.exports = {
 		if ( type != '' ) {
 			sql = `SELECT * FROM item WHERE type = "${type}" AND cost > 0 AND category = "${category}" ORDER BY cost`;
 		} else {
-			sql = `SELECT * FROM item WHERE cost > 0 AND category = "${category}" ORDER BY cost`;
+			sql = `SELECT * FROM item WHERE cost > 0 AND (category = "${category}" OR category = "other") ORDER BY cost`;
 		}
 		con.query(sql, (err, items) => {
 			if (err) throw err;
