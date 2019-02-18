@@ -68,7 +68,7 @@ bot.on('message', (message) => {
 
 	// roles
 
-	if (message.channel.id == '494591194026999820') {
+	if (message.channel.id == '546501478144147456') {
 		if (msg.startsWith('!assign ')) {
 			other.roles.assign(message);
 		}
