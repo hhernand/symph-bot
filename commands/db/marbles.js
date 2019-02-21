@@ -104,7 +104,7 @@ module.exports = {
 							else if ( items[0].stock == 0 ) {
 								// item out of stock
 								res = `Sorry, ${items[0].name} is out of stock!`;
-							} else if ( items[0].stock < want ) {
+							} else if ( items[0].stock < want && items[0].stock != -1 ) {
 								res = `There's not enough ${items[0].name} for you to buy!`;
 							} else {
 								// not enough marbles
