@@ -157,8 +157,13 @@ module.exports = {
 				for ( let item of items ) {
 					if ( item.type != 'general' && item.type in types ) {
 						let today = new Date();
-						if ( today.getMonth() == types[item.type].month ) {
-							console.log( item.name );
+						let monthAfter = types[item.type].month + 1;
+		                                if (monthAfter == 12) {
+			                                monthAfter = 0;
+		                                }
+
+		                                let stillOpen = today.getMonth() == monthAfter && today.getDate() <= 5;
+						if ( today.getMonth() == types[item.type].month || stillOpen == true ) {
 							event += `${item.name} - ${item.cost} ${types[item.type].currency}`;
 							if ( item.stock != -1 ) {
 								event += ` - ${item.stock} in stock`;
