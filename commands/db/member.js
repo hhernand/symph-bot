@@ -46,8 +46,16 @@ module.exports = {
 					.addField('Marbles', num, true)
 
 				let date = new Date();
+				
+				let monthAfter = types[type].month + 1;
+				if (monthAfter == 12) {
+					monthAfter = 0;
+				}
+
+				let stillOpen = date.getMonth() == monthAfter && date.getDate() <= 5;
+				
 				for (let type in types) {
-					if ('month' in types[type] && types[type].month == date.getMonth()) {
+					if ('month' in types[type] && ( types[type].month == date.getMonth() || stillOpen == true )) {
 						embed.addField(types[type].currency[0].toUpperCase() + types[type].currency.substr(1), c, true);
 					}
 				}
@@ -89,8 +97,15 @@ module.exports = {
 					.addField('Marbles', num, true)
 
 				let date = new Date();
+				let monthAfter = types[type].month + 1;
+				if (monthAfter == 12) {
+					monthAfter = 0;
+				}
+
+				let stillOpen = date.getMonth() == monthAfter && date.getDate() <= 5;
+				
 				for (let type in types) {
-					if ('month' in types[type] && types[type].month == date.getMonth()) {
+					if ('month' in types[type] && ( types[type].month == date.getMonth() || stillOpen == true ) ) {
 						embed.addField(types[type].currency[0].toUpperCase() + types[type].currency.substr(1), c, true);
 					}
 				}
@@ -142,7 +157,18 @@ module.exports = {
 						let done = '';
 
 						for (let i in types) {
-							if ('currency' in types[i] && types[i].currency == type && types[i].month == today.getMonth()) {
+							let stillOpen = false;
+							
+							if ( month in types[i] ) {
+								let monthAfter = types[i].month + 1;
+				                                if (monthAfter == 12) {
+					                                monthAfter = 0;
+				                                }
+
+				                                stillOpen = today.getMonth() == monthAfter && today.getDate() <= 5;
+							}
+							
+							if ('currency' in types[i] && types[i].currency == type && ( types[i].month == today.getMonth() || stillOpen == true )) {
 								helper.grantCandies(mID, add, con);
 								msg.channel.send(`${user} has been rewarded ${add} ${types[i].currency}.`);
 								return 0;
